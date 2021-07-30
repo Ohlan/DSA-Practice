@@ -2,19 +2,6 @@
 using namespace std;
 #define ll long long
 void solve();
-void rec(ll n)
-{
-	cout<<n<<" ";
-	if(n==1)
-		return;
-	else
-	{
-		if(n%2==0)
-			rec(n/2);
-		else
-			rec(3*n+1);
-	}
-}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -31,5 +18,14 @@ void solve()
 	
 	ll n;
 	cin>>n;
-	rec(n);
+	int sum=n*(n+1)/2;
+	n--;
+	int c=0;
+	while(n--)
+	{
+		int t;
+		cin>>t;
+		c+=t;
+	}
+	cout<<sum-c<<"\n";
 }
