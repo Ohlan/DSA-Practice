@@ -1,28 +1,32 @@
 #include<bits/stdc++.h>
 using namespace std;
-void solve(void);
-void rec1_N(int n)
-{
-	if(n>0)
-	{
-		rec1_N(n-1);
-		cout<<n<<" ";
-	}
-}
+#define ll long long
+void solve();
 int main()
 {
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 	int t;
 	cin>>t;
 	while(t--)
-	{
 		solve();
-		cout<<"\n";
-	}
 	return 0;
 }
 void solve()
 {
-	int n=5;
-//	cin>>n;
-	rec1_N(n);
+	
+	ll n;
+	cin>>n;
+	ll a[n],j=0;
+	for(auto i:a)
+	{
+		cin>>a[j++];
+	}	
+	ll max=0;
+	for(int i=0;i<n-1;i++)
+	{
+		if(a[i]*a[i+1]>max)
+			max=a[i]*a[i+1];
+	}
+    cout<<max<<"\n";
 }
