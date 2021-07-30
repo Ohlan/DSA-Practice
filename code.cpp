@@ -15,18 +15,39 @@ int main()
 void solve()
 {
 	
-	ll n;
+	ll n,count=0;
 	cin>>n;
-	ll a[n],j=0;
-	for(auto i:a)
+	ll a[n];
+	for (auto &x: a) {
+      cin >> x;
+    }	
+	ll min=20000000000,minp=20000000000;
+	for(int i=0;i<n;i++)
 	{
-		cin>>a[j++];
-	}	
-	ll max=0;
-	for(int i=0;i<n-1;i++)
-	{
-		if(a[i]*a[i+1]>max)
-			max=a[i]*a[i+1];
+		if(a[i]<min)
+		{
+			min=a[i];
+		}
 	}
-    cout<<max<<"\n";
+	for(int i=0;i<n;i++)
+	{
+		if(a[i]<minp&&a[i]!=min)
+		{
+			minp=a[i];
+		}
+	}
+	if(minp>2*min)
+	{
+		for(int i=0;i<n;i++)
+		{
+			if(a[i]>=minp)
+				count++;
+		}
+		if(count!=0)
+			cout<<count<<"\n";
+		else
+			cout<<n<<"\n";
+	}
+	else
+    	cout<<n<<"\n";
 }
