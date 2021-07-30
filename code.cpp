@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
+#define vi vector<int>
 void solve();
 int main()
 {
@@ -15,22 +16,20 @@ int main()
 }
 void solve()
 {
-	string s;
-	cin>>s;
-	int max=1,count=1,n=s.length();
-	for(int i=1,j=0;i<n;i++)
+	int n;
+	cin>>n;
+	vi v(n);
+	for(auto &x:v)
+		cin>>x;
+	int prev=0,curr=1;
+	ll ans=0;
+	for(;curr<n;curr++,prev++)
 	{
-		if(s[j]==s[i])
-			count++;
-		else
+		if(v[curr]<v[prev])
 		{
-			if(count>max)
-				max=count;
-			count=1;
-			j=i;
+			ans=ans+v[prev]-v[curr];
+			v[curr]=v[prev];
 		}
 	}
-	if(count>max)
-		max=count;
-	cout<<max<<"\n";
+	cout<<ans<<"\n";
 }
