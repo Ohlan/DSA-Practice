@@ -15,17 +15,22 @@ int main()
 }
 void solve()
 {
-	
-	ll n;
-	cin>>n;
-	int sum=n*(n+1)/2;
-	n--;
-	int c=0;
-	while(n--)
+	string s;
+	cin>>s;
+	int max=1,count=1,n=s.length();
+	for(int i=1,j=0;i<n;i++)
 	{
-		int t;
-		cin>>t;
-		c+=t;
+		if(s[j]==s[i])
+			count++;
+		else
+		{
+			if(count>max)
+				max=count;
+			count=1;
+			j=i;
+		}
 	}
-	cout<<sum-c<<"\n";
+	if(count>max)
+		max=count;
+	cout<<max<<"\n";
 }
