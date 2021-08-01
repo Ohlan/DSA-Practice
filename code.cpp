@@ -9,17 +9,15 @@ void print(vi &a)
 		cout<<x<<" ";
 	cout<<"\n";
 }
-void nowofways(int n, int step, int &ans)
+int noofways(int n)
 {
-	if(step>=n)
+	if(n<0)
 	{
-		if(step==n)
-			ans++;
-		return;
+		return 0;
 	}
-	nowofways(n,step+1,ans);
-	nowofways(n,step+2,ans);
-	nowofways(n,step+3,ans);
+	if(n==0)
+		return 1;
+	return noofways(n-1)+noofways(n-2)+noofways(n-3);
 
 }
 // void subsets(vi &a,vi subset,int i)
@@ -50,6 +48,6 @@ void solve()
 	int n;
 	cin>>n;
 	int ans=0;
-	nowofways(n,0,ans);
+	ans=noofways(n);
 	cout<<ans<<"\n";	
 }
