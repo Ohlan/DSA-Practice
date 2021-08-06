@@ -3,63 +3,39 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 void solve();
-int binomialCoeff(int n, int k)
-{
-    int res = 1;
- 
-    // Since C(n, k) = C(n, n-k)
-    if (k > n - k)
-        k = n - k;
- 
-    // Calculate value of
-    // [n * (n-1) *---* (n-k+1)] / [k * (k-1) *----* 1]
-    for (int i = 0; i < k; ++i) {
-        res *= (n - i);
-        res /= (i + 1);
-    }
- 
-    return res;
-}
- 
-void print(vi &a)
-{
-	for(auto x:a)
-		cout<<x<<" ";
-	cout<<"\n";
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-	// int t;
-	// cin>>t;
-	// while(t--)
-		// solve();
-	solve();
+	int t;
+	cin>>t;
+	while(t--)
+		solve();
+	// solveBT();
 	return 0;
 }
 void solve()
 {
-	ll n,q;
-	cin>>n>>q;
-	while(q--)
+	int n,p,k;
+	cin>>n>>p>>k;
+	n--;
+	int rem=p%k;
+	ll ans=0;
+	if(rem==0)
+		ans=p/k;
+	else
 	{
-		ll w,ans=0;
-		cin>>w;
-		ll k=1; 
-		if(w>3)
+		int d1=n%k,temp=n/k+1;
+		if(rem<=d1)
 		{
-			k=w/3;
-			if(w%3!=0)
-				k++;
+			ans=ans+(rem*temp);
 		}
-		k=3*k;
-		while(k<=n*3)
+		else
 		{
-			ans=((ans%1000000007)+(binomialCoeff(k,w))%1000000007)%1000000007;
-			k=k+3;
+			ans=ans+((d1+1)*(temp))+((rem-d1-1)*(temp-1));
 		}
-		cout<<ans<<"\n";
-	}	
+		ans+=p/k;
+	}
+	ans++;
+	cout<<ans<<"\n";
 }
