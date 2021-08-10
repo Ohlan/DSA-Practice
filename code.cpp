@@ -3,6 +3,28 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 void solve();
+int doUnion(vi a, int n, vi b, int m)  {
+	set<int> st;
+	for(auto x:a)
+		st.insert(x);
+
+	for(auto x:b)
+		st.insert(x);
+
+	return st.size();        
+}
+int doIntersection(vi a, int n, vi b, int m)
+{
+	set<int> st;map<int,int>mp;
+	for(auto x:a)
+		mp[x]=1;
+
+	for(auto x:b)
+		if(mp.count(x)!=0)
+			st.insert(x);
+
+	return st.size();
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -16,22 +38,13 @@ int main()
 }
 void solve()
 {
-	int n;
-	cin>>n;
+	int n,m;
+	cin>>n>>m;
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	int j=0;
-	for(int i=0;i<n;i++)
-		if(a[i]<0)
-			if(i!=j)
-			{
-				int temp=a[j];
-				a[j]=a[i];
-				a[i]=temp;
-				j++;
-			}
-	
-	for(auto x:a)
-		cout<<x<<" ";
+	vi b(m);
+	for(auto &x:b)
+		cin>>x;
+	cout<<doIntersection(a,n,b,m)<<"\n";
 }
