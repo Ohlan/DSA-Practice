@@ -21,20 +21,17 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	int i=0,j=n-1;
-	while(i<j)
-	{
-		while(a[i]<0&&i<n)
-			i++;
-		while(a[j]>=0&&j>=0)
-			j--;
-		if(i<j)	
-		{
-			int temp=a[i];
-			a[i]=a[j];
-			a[j]=temp;
-		}
-	}
+	int j=0;
+	for(int i=0;i<n;i++)
+		if(a[i]<0)
+			if(i!=j)
+			{
+				int temp=a[j];
+				a[j]=a[i];
+				a[i]=temp;
+				j++;
+			}
+	
 	for(auto x:a)
 		cout<<x<<" ";
 }
