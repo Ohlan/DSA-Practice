@@ -4,6 +4,39 @@ using namespace std;
 #define vi vector<int>
 void solve();
 
+int count_repeating(vi a,int l,int r,int e)
+{
+	int first,last,high=r,low=l;
+	int n=r-l+1;
+	while(l<=r)
+	{
+		int mid=(l+r)/2;
+		if(mid==0||(a[mid]==e&&a[mid-1]<e))
+		{
+			first=mid;
+			break;
+		}
+		else if(a[mid]<e)
+			l=mid+1;
+		else
+			r=mid-1;
+	}	
+	while(low<=high)
+	{
+		int mid=(low+high)/2;
+		if(mid==n-1||(a[mid]==e&&a[mid+1]>e))
+		{
+			last=mid;
+			break;
+		}
+		else if(a[mid]<=e)
+			low=mid+1;
+		else
+			high=mid-1;
+		
+	}
+	return last-first+1;
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -22,22 +55,6 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	int repeated,missing;
-	for(int i=0;i<n;i++)
-	{
-		int temp=a[abs(a[i])-1];
-		if(temp<0)
-		{
-			repeated=abs(a[i]);
-		}
-		a[abs(a[i])-1]=-a[abs(a[i])-1];
-	}
-	for(int i=0;i<n;i++)
-	{
-		if(a[i]>0)
-		{
-			missing=i+1;
-		}
-	}
-	cout<<repeated<<" "<<missing<<"\n";
+	sort(a.begin(),a.end());
+	cout<<count_repeating(a,0,n-1,3)<<"\n";
 }
