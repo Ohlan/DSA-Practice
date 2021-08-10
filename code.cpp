@@ -16,26 +16,25 @@ int main()
 }
 void solve()
 {
-	int n,p,k;
-	cin>>n>>p>>k;
-	n--;
-	int rem=p%k;
-	ll ans=0;
-	if(rem==0)
-		ans=p/k;
-	else
+	int n;
+	cin>>n;
+	vi a(n);
+	for(auto &x:a)
+		cin>>x;
+	int i=0,j=n-1;
+	while(i<j)
 	{
-		int d1=n%k,temp=n/k+1;
-		if(rem<=d1)
+		while(a[i]<0&&i<n)
+			i++;
+		while(a[j]>=0&&j>=0)
+			j--;
+		if(i<j)	
 		{
-			ans=ans+(rem*temp);
+			int temp=a[i];
+			a[i]=a[j];
+			a[j]=temp;
 		}
-		else
-		{
-			ans=ans+((d1+1)*(temp))+((rem-d1-1)*(temp-1));
-		}
-		ans+=p/k;
 	}
-	ans++;
-	cout<<ans<<"\n";
+	for(auto x:a)
+		cout<<x<<" ";
 }
