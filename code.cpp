@@ -4,38 +4,20 @@ using namespace std;
 #define vi vector<int>
 void solve();
 
-int count_repeating(vi a,int l,int r,int e)
+int peak(vi a,int l,int r)
 {
-	int first,last,high=r,low=l;
-	int n=r-l+1;
+	int n=r+1;
 	while(l<=r)
 	{
-		int mid=(l+r)/2;
-		if(mid==0||(a[mid]==e&&a[mid-1]<e))
-		{
-			first=mid;
-			break;
-		}
-		else if(a[mid]<e)
-			l=mid+1;
-		else
+		int mid =(l+r)/2;
+
+		if((mid==0||a[mid]>a[mid-1])&&(mid==n-1||a[mid]>a[mid+1]))
+			return a[mid];
+		else if(a[mid]<a[mid-1])
 			r=mid-1;
-	}	
-	while(low<=high)
-	{
-		int mid=(low+high)/2;
-		if(mid==n-1||(a[mid]==e&&a[mid+1]>e))
-		{
-			last=mid;
-			break;
-		}
-		else if(a[mid]<=e)
-			low=mid+1;
 		else
-			high=mid-1;
-		
+			l=mid+1;
 	}
-	return last-first+1;
 }
 int main()
 {
@@ -55,6 +37,5 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	sort(a.begin(),a.end());
-	cout<<count_repeating(a,0,n-1,3)<<"\n";
+	cout<<peak(a,0,n-1)<<"\n";
 }
