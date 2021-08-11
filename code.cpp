@@ -3,29 +3,9 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 void solve();
-int partition(vi &a, int l, int r)
+bool compare(pair<pair<int,int>,int> p1,pair<pair<int,int>,int> p2)
 {
-	int pivot=a[r];
-	int i=l-1;
-	for(int j=l;j<r;j++)
-	{
-		if(a[j]<=pivot)
-		{
-			i++;
-			swap(a[i],a[j]);
-		}
-	}
-	swap(a[i+1],a[r]);
-	return i+1;
-}
-void quicksort(vi &a, int l, int r)
-{
-	if(l<r)
-	{
-		int pi=partition(a, l, r);
-		quicksort(a, l, pi-1);
-		quicksort(a, pi+1, r);
-	}
+	return p1.first.second<p2.first.second;
 }
 int main()
 {
@@ -42,11 +22,30 @@ void solve()
 {
 	int n;
 	cin>>n;
-	vi a(n);
-	for(auto &x:a)
-		cin>>x;
-	quicksort(a,0,n-1);
+	vector<pair<pair<int,int>,int>> a(n);
+	for(int i=0;i<n;i++)
+	{
+		int x,y,j;
+		cin>>x>>y>>j;
+		a[i]=make_pair(make_pair(x,y),j);
+	}
+	sort(a.begin(),a.end());
 	for(auto x:a)
-		cout<<x<<" ";
+	{
+		cout<<x.first.first<<" "<<x.first.second<<" "<<x.second<<"\n";
+	}
+	// cout<<"\n";
+	// sort(a.begin(),a.end(),greater<int>());
+	// for(auto x:a)
+	// {
+	// 	cout<<x.first.first<<" "<<x.first.second<<" "<<x.second<<"\n";
+	// }
 	cout<<"\n";
+	sort(a.begin(),a.end(),compare);
+	for(auto x:a)
+	{
+		cout<<x.first.first<<" "<<x.first.second<<" "<<x.second<<"\n";
+	}
+
+
 }
