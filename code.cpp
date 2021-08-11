@@ -3,20 +3,28 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 void solve();
-
-int peak(vi a,int l,int r)
+int partition(vi &a, int l, int r)
 {
-	int n=r+1;
-	while(l<=r)
+	int pivot=a[r];
+	int i=l-1;
+	for(int j=l;j<r;j++)
 	{
-		int mid =(l+r)/2;
-
-		if((mid==0||a[mid]>a[mid-1])&&(mid==n-1||a[mid]>a[mid+1]))
-			return a[mid];
-		else if(a[mid]<a[mid-1])
-			r=mid-1;
-		else
-			l=mid+1;
+		if(a[j]<=pivot)
+		{
+			i++;
+			swap(a[i],a[j]);
+		}
+	}
+	swap(a[i+1],a[r]);
+	return i+1;
+}
+void quicksort(vi &a, int l, int r)
+{
+	if(l<r)
+	{
+		int pi=partition(a, l, r);
+		quicksort(a, l, pi-1);
+		quicksort(a, pi+1, r);
 	}
 }
 int main()
@@ -37,5 +45,8 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	cout<<peak(a,0,n-1)<<"\n";
+	quicksort(a,0,n-1);
+	for(auto x:a)
+		cout<<x<<" ";
+	cout<<"\n";
 }
