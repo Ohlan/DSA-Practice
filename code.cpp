@@ -6,11 +6,15 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int euclidianGCD(int a,int b)
+int trailingZeroesFact(int n)
 {
-	if(a==0)
-		return b;
-	return euclidianGCD(b%a,a);
+	int i=1;int ans=0;
+	while(i*5<=n)
+	{
+		i=i*5;
+		ans=ans+n/i;
+	}
+	return ans;
 }
 
 int main()
@@ -27,8 +31,8 @@ int main()
 }
 void solve()
 {
-	int n,m;
-	cin>>n>>m;
+	int n;
+	cin>>n;
 	
-	cout<<euclidianGCD(n,m)<<"\n";
+	cout<<trailingZeroesFact(n)<<"\n";
 }
