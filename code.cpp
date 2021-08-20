@@ -5,38 +5,20 @@ using namespace std;
 #define vi vector<int>
 #define ull unsigned long long
 typedef pair<int,int> ii;
-void solve();
-int gcd(int a,int b)
+void solve(); 
+void rotateClockwise(int** a,int n)
 {
-	if(a==0)
-		return b;
-	return gcd(b%a,a);
+	for(int i=0;i<n/2;i++)
+	{
+		for(int j=i;j<n-1-i;j++)
+		{
+			int temp=a[i][j];
+			a[i][j]=a[n-1-j][i];
+			a[n-1-j][i]=a[n-i-1][n-1-j];
+			a[n-i-1][n-1-j]=a[j][n-1-i];
+		}
+	}
 }
-void leftRotate(vi &arr, int d, int n)
-{
-    /* To handle if d >= n */
-    d = d % n;
-    int g_c_d = gcd(d, n);
-    for (int i = 0; i < g_c_d; i++) {
-        /* move i-th values of blocks */
-        int temp = arr[i];
-        int j = i;
- 
-        while (1) {
-            int k = j + d;
-            if (k >= n)
-                k = k - n;
- 
-            if (k == i)
-                break;
- 
-            arr[j] = arr[k];
-            j = k;
-        }
-        arr[j] = temp;
-    }
-}
- 
 
 int main()
 {
@@ -52,27 +34,28 @@ int main()
 }
 void solve()
 {
-	int n,m;
-	cin>>n>>m;
-	vi a(n);
-	for(auto &x:a)
-		cin>>x;
+	int n;
+	cin>>n;
+	int* a[n];
+	
+	for(int i=0;i<n;i++)
+	{
+		a[i]=new int[n];
+		for(int j=0;j<n;j++)
+		{
+			a[i][j]=j+i*n+1;
+		}
+	}
 
-	leftRotate(a,m,n);
-	// while(rep--)
-	// {
-	// 	for(int j=0;j<gcd;j++)
-	// 	{
-	// 		int temp=a[0];
-	// 		for(int i=j;i<n-gcd;i+=gcd)
-	// 		{
-	// 			a[icd]=a[i];
-	// 		}
-	// 		a[n-1]=temp;
-	// 	}
-	// }
+	rotateClockwise(a,n);
 
-	for(auto x: a)
-		cout<<x<<" ";
-	cout<<"\n";
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<n;j++)
+		{
+			cout<<a[i][j]<<" ";
+		}
+		cout<<"\n";
+	}
+
 }
