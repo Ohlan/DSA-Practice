@@ -6,21 +6,11 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-void simpleSeive(int limit)
+int euclidianGCD(int a,int b)
 {
-	vector<bool> flag(limit,true);
-
-	for(int i=2;i*i<limit;i++)
-	{
-		if(flag[i]==true)	
-			for(int j=i*i;j<limit;j+=i)
-			{
-				flag[j]=false;
-			}
-	}
-	for(int i=2;i<limit;i++)
-		if(flag[i]==true)
-			cout<<i<<" ";
+	if(a==0)
+		return b;
+	return euclidianGCD(b%a,a);
 }
 
 int main()
@@ -37,9 +27,8 @@ int main()
 }
 void solve()
 {
-	int n;
-	cin>>n;
+	int n,m;
+	cin>>n>>m;
 	
-	simpleSeive(n);
-	cout<<"\n";
+	cout<<euclidianGCD(n,m)<<"\n";
 }
