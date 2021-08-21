@@ -7,35 +7,29 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-int maximumIndex(int a[],int n)
+int findwater(int a[],int n)
 {
-	int s[n];
-	s[0]=a[0];
-	for(int i=1;i<n;i++)
+	int lmax=0,rmax=0,low=0,high=n-1,res=0;
+	while(low<=high)
 	{
-		s[i]=min(a[i],s[i-1]);
-	}
-	int l[n];
-	l[n-1]=a[n-1];
-	for(int i=n-2;i>=0;i--)
-	{
-		l[i]=max(a[i],l[i+1]);
-	}
-	int i=0,j=0,ans=0;
-	while(i<n&&j<n)
-	{
-		if(s[i]<=l[j])
+		if(a[low]<a[high])
 		{
-			ans=max(ans,j-i);
-			j++;
+			if(a[low]>lmax)
+				lmax=a[low];
+			else
+				res+=lmax-a[low];
+			low++;
 		}
 		else
 		{
-			i++;
+			if(a[high]>rmax)
+				rmax==a[high];
+			else
+				res+=rmax-a[high];
+			high--;
 		}
 	}
-	
-	return ans;
+	return res;
 }
 
 int main()
@@ -61,6 +55,6 @@ void solve()
 		cin>>a[i];
 	}
 
-	cout<<maximumIndex(a,n)<<"\n";
+	cout<<findwater(a,n)<<"\n";
 
 }
