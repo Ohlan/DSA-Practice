@@ -44,35 +44,23 @@ node* scanlist(int n)
 	}
 	return head;
 }
-bool detectloop(node *head)
+int looplength(node* head)
 {
 	node* slow=head;
 	node* fast=head;
+	int count=0,res=0;
 	while(slow&&fast&&(fast->next))
 	{
 		slow=slow->next;
 		fast=fast->next->next;
 		if(fast==slow)
-			return true;
-	}
-	return false;
-}
-void removeloop(node* head)
-{
-	node* slow=head;
-	node* fast=head;
-	node* prev=NULL;
-	while(slow&&fast&&(fast->next))
-	{
-		prev=slow;
-		slow=slow->next;
-		fast=fast->next->next;
-		if(fast==slow)
+			count++;
+		if(count==1)
+			res++;
+		if(count==2)
 			break;
 	}
-	if(fast==slow&&prev!=NULL)
-		prev->next=NULL;
-
+	return res;
 }
 // node* mergesortedlist(node* h1,node* h2)
 // {
@@ -134,8 +122,7 @@ void solve()
 	h2->next=h3;
 	h3->next=h4;
 	h4->next=h5;
-	h5->next=h1;
-	cout<<detectloop(h1)<<" ";
-	removeloop(h1);
-	cout<<detectloop(h1);
+	h5->next=h3;
+	cout<<looplength(h1)<<" ";
+	
 }
