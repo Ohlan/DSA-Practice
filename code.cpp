@@ -6,17 +6,28 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-void rotateClockwise(int** a,int n)
+void rearrangeAlternate(int a[],int n)
 {
-	for(int i=0;i<n/2;i++)
+	int maxi=n-1;
+	int mini=0;
+	int max=a[maxi]+1;
+
+	for(int i=0;i<n;i++)
 	{
-		for(int j=i;j<n-1-i;j++)
+		if((i&1)==0)
 		{
-			int temp=a[i][j];
-			a[i][j]=a[n-1-j][i];
-			a[n-1-j][i]=a[n-i-1][n-1-j];
-			a[n-i-1][n-1-j]=a[j][n-1-i];
+			a[i]+=(a[maxi]%max)*max;
+			maxi--;
 		}
+		else
+		{
+			a[i]+=(a[mini]%max)*max;
+			mini++;
+		}
+	}
+	for(int i=0;i<n;i++)
+	{
+		a[i]=a[i]/max;
 	}
 }
 
@@ -36,26 +47,18 @@ void solve()
 {
 	int n;
 	cin>>n;
-	int* a[n];
+	int a[n];
 	
 	for(int i=0;i<n;i++)
 	{
-		a[i]=new int[n];
-		for(int j=0;j<n;j++)
-		{
-			a[i][j]=j+i*n+1;
-		}
+		cin>>a[i];
 	}
 
-	rotateClockwise(a,n);
+	rearrangeAlternate(a,n);
 
 	for(int i=0;i<n;i++)
 	{
-		for(int j=0;j<n;j++)
-		{
-			cout<<a[i][j]<<" ";
-		}
-		cout<<"\n";
+		cout<<a[i]<<" ";
 	}
 
 }
