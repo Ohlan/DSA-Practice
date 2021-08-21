@@ -9,6 +9,11 @@ typedef struct node
 {
 	int data;
 	node* next;
+	node(int data=0)
+	{
+		this->data=data;
+		next=NULL;
+	}
 }node;
 void solve();
 void printlist(node* head)
@@ -39,41 +44,18 @@ node* scanlist(int n)
 	}
 	return head;
 }
-void swapKnodes(node **head,int n,int k)
+bool detectloop(node *head)
 {
-	if(k>n||n<=1)
-		return ;
-	node* p1=(*head),*p2=(*head);
-	node* prev1=NULL,*prev2=NULL;
-	int n2=n-k;k--;
-	while(n2--)
+	node* slow=head;
+	node* fast=head;
+	while(slow&&fast&&(fast->next))
 	{
-		prev2=p2;
-		p2=p2->next;
+		slow=slow->next;
+		fast=fast->next->next;
+		if(fast==slow)
+			return true;
 	}
-
-	while(k--)
-	{
-		prev1=p1;
-		p1=p1->next;
-	}
-	if(prev1)
-	{
-		prev1->next=p2;
-		prev2->next=p1;
-		node* temp=p1->next;
-		p1->next=p2->next;
-		p2->next=temp;
-	}
-	else
-	{
-		prev2->next=p1;
-		node* temp=p1->next;
-		p1->next=p2->next;
-		p2->next=temp;
-		(*head)=p2;
-	}
-
+	return false;
 }
 // node* mergesortedlist(node* h1,node* h2)
 // {
@@ -126,16 +108,16 @@ int main()
 }
 void solve()
 {
-	node* h1;
-	node* h2;
-	int n, m;
-	cin>>n>>m;
-	h1=scanlist(n);
-	h2=scanlist(m);
-	swapKnodes(&h2,m,1);
-	// node* merged=mergesortedlist(h1,h2);
-	printlist(h1);
-	printlist(h2);
-	// printlist(merged);
+	node* h1=new node(1);
+	node* h2=new node(2);
+	node* h3=new node(3);
+	node* h4=new node(4);
+	node* h5=new node(5);
+	h1->next=h2;
+	h2->next=h3;
+	h3->next=h4;
+	h4->next=h5;
+	h5->next=h1;
+	cout<<detectloop(h1);
 
 }
