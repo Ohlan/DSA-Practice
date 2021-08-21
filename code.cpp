@@ -9,27 +9,13 @@ typedef pair<int,int> ii;
 void solve(); 
 int findwater(int a[],int n)
 {
-	int lmax=0,rmax=0,low=0,high=n-1,res=0;
-	while(low<=high)
+	int profit=0;
+	for(int i=1;i<n;i++)
 	{
-		if(a[low]<a[high])
-		{
-			if(a[low]>lmax)
-				lmax=a[low];
-			else
-				res+=lmax-a[low];
-			low++;
-		}
-		else
-		{
-			if(a[high]>rmax)
-				rmax==a[high];
-			else
-				res+=rmax-a[high];
-			high--;
-		}
+		if(a[i]>a[i-1])
+			profit+=a[i]-a[i-1];
 	}
-	return res;
+	return profit;
 }
 
 int main()
