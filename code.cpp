@@ -7,26 +7,16 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-bool findwater(int a[],int n)
+int kadane(int a[],int n)
 {
-	int x=0,y=0;
+	int res=a[0];
+	int maxend=a[0];
 	for(int i=1;i<n;i++)
 	{
-		if(a[i]>=a[i-1])
-			x++;
-		else
-			y++;
+		maxend=max(maxend+a[i],a[i]);
+		res=max(res,maxend);
 	}
-	if(x==1||y==1)
-	{
-		if(a[n-1]<a[0])
-			x++;
-		else
-			y++;
-		if(x==1||y==1)
-			return true;
-	}
-	return false;
+	return res;
 }
 
 int main()
@@ -52,6 +42,6 @@ void solve()
 		cin>>a[i];
 	}
 
-	cout<<findwater(a,n)<<"\n";
+	cout<<kadane(a,n)<<"\n";
 
 }
