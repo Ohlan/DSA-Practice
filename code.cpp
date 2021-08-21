@@ -44,23 +44,41 @@ node* scanlist(int n)
 	}
 	return head;
 }
-int looplength(node* head)
+void reversell(node** head)
 {
-	node* slow=head;
-	node* fast=head;
-	int count=0,res=0;
-	while(slow&&fast&&(fast->next))
+	if(!(*head))
+		return;
+	node *prev=NULL;
+	node *curr=(*head);
+	node *temp;
+	while(curr)
 	{
-		slow=slow->next;
-		fast=fast->next->next;
-		if(fast==slow)
-			count++;
-		if(count==1)
-			res++;
-		if(count==2)
-			break;
+		temp=curr->next;
+		curr->next=prev;
+		prev=curr;
+		curr=temp;
 	}
-	return res;
+	(*head)=prev;
+}
+bool isPalindrome(node* head)
+{
+	node* mid=head;
+	node* h2=head;
+	while(mid&&h2&&(h2->next))
+	{
+		mid=mid->next;
+		h2=h2->next->next;
+	}
+	h2=mid->next;
+	reversell(&h2);
+	while(h2)
+	{
+		if(h2->data!=head->data)
+			return false;
+		h2=h2->next;
+		head=head->next;
+	}
+	return true;
 }
 // node* mergesortedlist(node* h1,node* h2)
 // {
@@ -113,16 +131,14 @@ int main()
 }
 void solve()
 {
-	node* h1=new node(1);
-	node* h2=new node(2);
-	node* h3=new node(3);
-	node* h4=new node(4);
-	node* h5=new node(5);
-	h1->next=h2;
-	h2->next=h3;
-	h3->next=h4;
-	h4->next=h5;
-	h5->next=h3;
-	cout<<looplength(h1)<<" ";
+	node* head;
+	int n;
+	cin>>n;
+	head=scanlist(n);
+	
+	
+	// node* merged=mergesortedlist(h1,h2);
+	cout<<isPalindrome(head);
+	// printlist(merged);
 	
 }
