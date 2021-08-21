@@ -6,28 +6,16 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-void rearrangeAlternate(int a[],int n)
+void rearrange(int a[],int n)
 {
-	int maxi=n-1;
-	int mini=0;
-	int max=a[maxi]+1;
-
+	int max=n;
 	for(int i=0;i<n;i++)
 	{
-		if((i&1)==0)
-		{
-			a[i]+=(a[maxi]%max)*max;
-			maxi--;
-		}
-		else
-		{
-			a[i]+=(a[mini]%max)*max;
-			mini++;
-		}
+		a[i]+=(a[a[i]]%max)*max;
 	}
 	for(int i=0;i<n;i++)
 	{
-		a[i]=a[i]/max;
+		a[i]/=max;
 	}
 }
 
@@ -54,7 +42,7 @@ void solve()
 		cin>>a[i];
 	}
 
-	rearrangeAlternate(a,n);
+	rearrange(a,n);
 
 	for(int i=0;i<n;i++)
 	{
