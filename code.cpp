@@ -18,7 +18,20 @@ int kadane(int a[],int n)
 	}
 	return res;
 }
+int maxcircularsum(int a[],int n)
+{
+	int normalsum=kadane(a,n);
+	if(normalsum<0)
+		return normalsum;
 
+	int sum=0;
+	for(int i=0;i<n;i++)
+	{
+		sum+=a[i];
+		a[i]=-a[i];
+	}
+	return max(normalsum,sum+kadane(a,n));
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -42,6 +55,6 @@ void solve()
 		cin>>a[i];
 	}
 
-	cout<<kadane(a,n)<<"\n";
+	cout<<maxcircularsum(a,n)<<"\n";
 
 }
