@@ -7,15 +7,26 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-int findwater(int a[],int n)
+bool findwater(int a[],int n)
 {
-	int profit=0;
+	int x=0,y=0;
 	for(int i=1;i<n;i++)
 	{
-		if(a[i]>a[i-1])
-			profit+=a[i]-a[i-1];
+		if(a[i]>=a[i-1])
+			x++;
+		else
+			y++;
 	}
-	return profit;
+	if(x==1||y==1)
+	{
+		if(a[n-1]<a[0])
+			x++;
+		else
+			y++;
+		if(x==1||y==1)
+			return true;
+	}
+	return false;
 }
 
 int main()
