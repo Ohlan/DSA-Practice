@@ -6,45 +6,22 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-void spiraltravelmatrix(int** a,int n)
+void sortedsearch(int** a,int n,int x)
 {
-	int rstart=0,rend=n-1;
-	int cstart=0,cend=n-1;
-	while(rstart<=rend&&cstart<=cend)
+	int i=0,j=n-1;
+	while(i<n&&j>=0)
 	{
-		int k=cstart;
-		while(k<=cend)
+		if(a[i][j]==x)
 		{
-			cout<<a[rstart][k]<<" ";
-			k++;
+			cout<<"element present at:"<<i<<" "<<j<<"\n";
+			return;
 		}
-		cout<<"\n";
-		rstart++;
-		k=rstart;
-		while(k<=rend)
-		{
-			cout<<a[k][cend]<<" ";
-			k++;
-		}
-		cout<<"\n";
-		cend--;
-		k=cend;
-		while(k>=cstart)
-		{
-			cout<<a[rend][k]<<" ";
-			k--;
-		}
-		cout<<"\n";
-		rend--;
-		k=rend;
-		while(k>=rstart)
-		{
-			cout<<a[k][cstart]<<" ";
-			k--;
-		}
-		cout<<"\n";
-		cstart++;
+		if(a[i][j]<x)
+			i++;
+		else
+			j--;
 	}
+	cout<<"element not found\n";
 }
 
 int main()
@@ -64,7 +41,7 @@ void solve()
 	int n;
 	cin>>n;
 	int* a[n];
-	
+	int x=16;
 	for(int i=0;i<n;i++)
 	{
 		a[i]=new int[n];
@@ -74,7 +51,7 @@ void solve()
 		}
 	}
 
-	spiraltravelmatrix(a,n);
+	sortedsearch(a,n,x);
 
 	
 
