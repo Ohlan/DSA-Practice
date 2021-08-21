@@ -1,37 +1,52 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define mod 1000000007
-#define MIN -1000000
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve(); 
-int kadane(int a[],int n)
+void spiraltravelmatrix(int** a,int n)
 {
-	int res=a[0];
-	int maxend=a[0];
-	for(int i=1;i<n;i++)
+	int rstart=0,rend=n-1;
+	int cstart=0,cend=n-1;
+	while(rstart<=rend&&cstart<=cend)
 	{
-		maxend=max(maxend+a[i],a[i]);
-		res=max(res,maxend);
+		int k=cstart;
+		while(k<=cend)
+		{
+			cout<<a[rstart][k]<<" ";
+			k++;
+		}
+		cout<<"\n";
+		rstart++;
+		k=rstart;
+		while(k<=rend)
+		{
+			cout<<a[k][cend]<<" ";
+			k++;
+		}
+		cout<<"\n";
+		cend--;
+		k=cend;
+		while(k>=cstart)
+		{
+			cout<<a[rend][k]<<" ";
+			k--;
+		}
+		cout<<"\n";
+		rend--;
+		k=rend;
+		while(k>=rstart)
+		{
+			cout<<a[k][cstart]<<" ";
+			k--;
+		}
+		cout<<"\n";
+		cstart++;
 	}
-	return res;
 }
-int maxcircularsum(int a[],int n)
-{
-	int normalsum=kadane(a,n);
-	if(normalsum<0)
-		return normalsum;
 
-	int sum=0;
-	for(int i=0;i<n;i++)
-	{
-		sum+=a[i];
-		a[i]=-a[i];
-	}
-	return max(normalsum,sum+kadane(a,n));
-}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -48,13 +63,19 @@ void solve()
 {
 	int n;
 	cin>>n;
-	int a[n];
+	int* a[n];
 	
 	for(int i=0;i<n;i++)
 	{
-		cin>>a[i];
+		a[i]=new int[n];
+		for(int j=0;j<n;j++)
+		{
+			a[i][j]=j+i*n+1;
+		}
 	}
 
-	cout<<maxcircularsum(a,n)<<"\n";
+	spiraltravelmatrix(a,n);
+
+	
 
 }
