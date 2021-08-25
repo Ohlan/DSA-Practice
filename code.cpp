@@ -9,76 +9,56 @@ typedef struct node
 {
 	int data;
 	node* next;
+	node* rm;
 	node(int data=0)
 	{
 		this->data=data;
 		next=NULL;
+		rm=NULL;
 	}
 }node;
 void solve();
-void printlist(node* head)
+void printrmlist(node* head)
 {
 	while(head)
 	{
 		cout<<head->data<<" ";
+		if(head->rm)
+			cout<<head->rm->data;
+		cout<<"\n";
 		head=head->next;
 	}
 	cout<<"\n";
 }
-node* scanlist(int n)
+
+node* clonelist(node* head)
 {
-	if(n<=0)
-		return NULL;
-	node* head=new node();
-	cin>>head->data;
-	head->next=NULL;
-	node* prev=head;
-	n--;
-	while(n--)
+	node* h=head;
+	while(h)
 	{
-		node* temp=new node();
-		cin>>temp->data;
-		temp->next=NULL;
-		prev->next=temp;
-		prev=prev->next;
+		node* temp=h->next;
+		node* nw=new node(h->data);
+		h->next=nw;
+		h->next->next=temp;
+		h=temp;
 	}
-	return head;
-}
-void reversell(node** head)
-{
-	if(!(*head))
-		return;
-	node *prev=NULL;
-	node *curr=(*head);
-	node *temp;
-	while(curr)
+	h=head;
+	while(h)
 	{
-		temp=curr->next;
-		curr->next=prev;
-		prev=curr;
-		curr=temp;
+		h->next->rm=h->rm?h->rm->next:NULL;
+		h=h->next->next;
 	}
-	(*head)=prev;
-}
-bool isPalindrome(node* head)
-{
-	node* mid=head;
-	node* h2=head;
-	while(mid&&h2&&(h2->next))
+	h=head;
+	node* clone=h->next;
+	while(h->next->next)
 	{
-		mid=mid->next;
-		h2=h2->next->next;
+		node* temp=h->next;
+		h->next=h->next->next;
+		temp->next=temp->next->next;
+		h=h->next;
 	}
-	h2=mid->next;
-	reversell(&h2);
-	while(h2)
-	{
-		if(h2->data!=head->data)
-			return false;
-		h2=h2->next;
-		head=head->next;
-	}
-	return true;
+	h->next=NULL;
+	return clone;
 }
 // node* mergesortedlist(node* h1,node* h2)
 // {
@@ -131,14 +111,22 @@ int main()
 }
 void solve()
 {
-	node* head;
-	int n;
-	cin>>n;
-	head=scanlist(n);
-	
-	
-	// node* merged=mergesortedlist(h1,h2);
-	cout<<isPalindrome(head);
-	// printlist(merged);
-	
+	node* h1=new node(1);
+	node* h2=new node(2);
+	node* h3=new node(3);
+	node* h4=new node(4);
+	node* h5=new node(5);
+	h1->next=h2;
+	h2->next=h3;
+	h3->next=h4;
+	h4->next=h5;
+	h1->rm=h3;
+	h2->rm=h1;
+	h3->rm=h5;
+	h4->rm=h4;
+	h5->rm=h1;
+	printrmlist(h1);
+	node* head=clonelist(h1);
+	printrmlist(head);
+	printrmlist(h1);
 }
