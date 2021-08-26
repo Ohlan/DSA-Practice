@@ -14,6 +14,17 @@ typedef struct node
         left = right = NULL;
     }
 }node;
+typedef struct dllnode
+{
+	int data;
+	struct dllnode* prev;
+	struct dllnode* next;
+	dllnode(int data)
+    {
+        this->data = data;
+        prev = next = NULL;
+    }
+}dllnode;
 void solveBT();
 void levelorder(node* root)
 {
@@ -44,122 +55,43 @@ void levelorder(node* root)
 		q.pop();
 	}
 }
-void leftview(node* root)
+node* LCA(node* root,int k1,int k2)
 {
-	if(root==NULL)
-		return;
-	queue<node*> q;
-	q.push(root);
-	q.push(NULL);
-	while(q.empty()==false)
-	{
-		node* temp=q.front();
-		if(temp)
-		{
-			cout<<temp->data<<"\n";
-			while(q.front()!=NULL)	
-			{
-				if (temp->left != NULL) 
-		            q.push(temp->left); 
+	if(!root)
+		return NULL;
+	if(root->data==k1||root->data==k2)
+		return root;
 
-		        if (temp->right != NULL) 
-		            q.push(temp->right); 
-				q.pop();
-				temp=q.front();
-			}
-			q.push(NULL);
-		}
-		q.pop();
-	}
+	node* leftlca=LCA(root->left,k1,k2);
+	node* rightlca=LCA(root->right,k1,k2);
+	if(leftlca!=NULL&&rightlca!=NULL)
+		return root;
+	return (leftlca!=NULL)?leftlca:rightlca;
 }
-void rightview(node* root)
+void BT2Dll(node* root,dllnode** head)
 {
 	if(root==NULL)
-		return;
-	queue<node*> q;
-	q.push(root);
-	q.push(NULL);
-	while(q.empty()==false)
 	{
-		node* temp=q.front();
-		if(temp)
-		{
-			node* t;
-			while(q.front()!=NULL)	
-			{
-				if (temp->left != NULL) 
-		            q.push(temp->left); 
+		return;
+	}
+	static dllnode* prev=NULL;
+	BT2Dll(root->left,head);
+	dllnode* temp=new dllnode(root->data);
 
-		        if (temp->right != NULL) 
-		            q.push(temp->right);
-		        t=temp; 
-				q.pop();
-				temp=q.front();
-			}
-			cout<<t->data<<"\n";
-			q.push(NULL);
-		}
-		q.pop();
-	}
-}
-void topview(node* root)
-{
-	if(root==NULL)
-		return;
-	queue<node*> q;
-	q.push(root);
-	int hd=0;
-	root->hd=0;
-	map<int,int> mp;
-	while(q.empty()==false)
+	if(!prev)
 	{
-		node* temp=q.front();
-		hd=temp->hd;
-		if(mp.count(hd)==0)
-			mp[hd]=temp->data;
-		if (temp->left != NULL) 
-		{
-			temp->left->hd=hd-1;
-		    q.push(temp->left);
-		} 
-        if (temp->right != NULL) 
-        {
-        	temp->right->hd=hd+1;
-        	q.push(temp->right);
-        }
-        q.pop();
+		temp->prev=NULL;
+		prev=temp;
+		(*head)=temp;
 	}
-	for(auto x:mp)
-		cout<<x.second<<" ";
-}
-void bottomview(node* root)
-{
-	if(root==NULL)
-		return;
-	queue<node*> q;
-	q.push(root);
-	int hd=0;
-	root->hd=0;
-	map<int,int> mp;
-	while(q.empty()==false)
+	else
 	{
-		node* temp=q.front();
-		hd=temp->hd;
-		mp[hd]=temp->data;
-		if (temp->left != NULL) 
-		{
-			temp->left->hd=hd-1;
-		    q.push(temp->left);
-		} 
-        if (temp->right != NULL) 
-        {
-        	temp->right->hd=hd+1;
-        	q.push(temp->right);
-        }
-        q.pop();
+		temp->prev=prev;
+		prev->next=temp;
+		prev=temp;
 	}
-	for(auto x:mp)
-		cout<<x.second<<" ";
+
+	BT2Dll(root->right,head);
 }
 int height(node* root)
 {
@@ -168,13 +100,15 @@ int height(node* root)
 	return max(height(root->left),height(root->right))+1;
 
 }
-int diameter(node* root)
+void printlist(dllnode* head)
 {
-	if(root==NULL)
-		return 0;
-	return max(diameter(root->left),max(diameter(root->right),height(root->left)+height(root->right)+1));
+	while(head)
+	{
+		cout<<head->data<<" ";
+		head=head->next;
+	}
+	cout<<"\n";
 }
-
 void inorder(node* root)
 {
 	if(root==NULL)
@@ -193,7 +127,6 @@ int main()
 }
 void solveBT()
 {
-	
 	node *root = new node(6);
     root->left = new node(3);
     root->right = new node(7);
@@ -201,7 +134,12 @@ void solveBT()
     root->left->left->right = new node(1);
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
+	node* lca=LCA(root,1,7);
+	cout<<lca->data<<"\n";
+	lca=LCA(root,1,3);
+	cout<<lca->data<<"\n";
+	dllnode* head;
+	BT2Dll(root,&head);
+	printlist(head);
 	
-	cout<<height(root)<<"\n";
-	cout<<diameter(root)<<"\n";
 }
