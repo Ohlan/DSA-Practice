@@ -16,50 +16,35 @@ typedef struct node
 	}	
 }node;
 void solve();
-ii getMax(node mainc,node &max)
-{
-	if(mainc.components.size()==0)
-	{
-		if(mainc.data>max.data)
-			max=mainc;
-		return make_pair(mainc.data,1);
+void merge(int a1[], int a2[], int n, int m) {
+	    int i=0,j=0;
+	    while(i<n&&j<m)
+	    {
+	        if(a1[i]<=a2[j])
+	        {
+	            cout<<a1[i]<<" ";
+	            i++;
+	        }
+	        else
+	        {
+	            cout<<a2[j]<<" ";
+	            j++;
+	        }
+	        
+	    }
+	    while(i<n)
+	    {
+	        cout<<a1[i]<<" ";
+	        i++;
+	        
+	    }
+	    while(j<m)
+	    {
+	        cout<<a2[j]<<" ";
+	        j++;
+	    }
+	    cout<<"\n";
 	}
-	int sum=0,parts=0;double sp=0;
-	for(int i=0;i<mainc.components.size();i++)
-	{
-		ii p=getMax(mainc.components[i],max);
-		double speed=(p.first)/(p.second);
-		if(speed>sp)
-		{
-			max=mainc.components[i];
-			sp=speed;
-		}
-		sum+=p.first;
-		parts+=p.second;
-	}
-	sum+=(mainc.data);parts++;
-	double speedm=sum/parts;
-	if(speedm>sp)
-	{
-		max=mainc;
-		sp=speedm;
-	}
-	return make_pair(sum,parts);
-
-}
-node* getFastestComponent(node* root)
-{
-	if(root)
-	{
-		node mainc=(*root);
-		node max=node(0);
-		
-		ii p=getMax(mainc,max);
-		node* res=&max;
-		return res;
-	}
-	return NULL;
-}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -75,22 +60,14 @@ int main()
 
 void solve()
 {
-	node* root=new node(200);
-	node rl(120);
-	node rr(180);
-	node a,b,c,d,e,f;
-	a=node(110);
-	b=node(20);
-	c=node(30);
-	d=node(180);
-	e=node(150);
-	f=node(80);
-	rl.components={a,b,c};
-	rr.components={d,e,f};
-	root->components={rl,rr};
-
-	node* ans=getFastestComponent(root);
-	cout<<ans->data<<" "<<ans->components.size();
+	int n,m;
+	cin>>n>>m;
+	int a[n],b[m];
+	for(int i=0;i<n;i++)
+		cin>>a[i];
+	for(int j=0;j<m;j++)
+		cin>>b[j];
+	merge(a,b,n,m);
 
 
 }
