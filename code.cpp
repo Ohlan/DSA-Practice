@@ -16,35 +16,30 @@ typedef struct node
 	}	
 }node;
 void solve();
-void merge(int a1[], int a2[], int n, int m) {
-	    int i=0,j=0;
-	    while(i<n&&j<m)
-	    {
-	        if(a1[i]<=a2[j])
-	        {
-	            cout<<a1[i]<<" ";
-	            i++;
-	        }
-	        else
-	        {
-	            cout<<a2[j]<<" ";
-	            j++;
-	        }
-	        
-	    }
-	    while(i<n)
-	    {
-	        cout<<a1[i]<<" ";
-	        i++;
-	        
-	    }
-	    while(j<m)
-	    {
-	        cout<<a2[j]<<" ";
-	        j++;
-	    }
-	    cout<<"\n";
-	}
+void nextPermutation(vector<int>& a) 
+{
+    int i,n=a.size();
+    for(i=n-1;i>0;i--)
+    {
+        if(a[i]>a[i-1])
+            break;
+    }
+    if(i==0)
+        sort(a.begin(),a.end());
+    else
+    {
+        int min=i;
+        for(int j=i;j<n;j++)
+        {
+            if(a[j]>a[i-1]&&a[j]<a[min])
+                min=j;
+        }
+        int temp=a[min];
+        a[min]=a[i-1];
+        a[i-1]=temp;
+        sort(a.begin()+i,a.end());
+    }
+}    
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -60,14 +55,16 @@ int main()
 
 void solve()
 {
-	int n,m;
-	cin>>n>>m;
-	int a[n],b[m];
+	int n;
+	cin>>n;
+	vi a(n);
 	for(int i=0;i<n;i++)
 		cin>>a[i];
-	for(int j=0;j<m;j++)
-		cin>>b[j];
-	merge(a,b,n,m);
+	
+	nextPermutation(a);
+	for(auto x:a)
+		cout<<x<<" ";
+	cout<<"\n";
 
 
 }
