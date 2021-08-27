@@ -25,23 +25,14 @@ void solve()
 {
 	int a;
 	cin>>a;
-	if(a==0)
-	{
-		cout<<0<<"\n";
-		return;
-	}
-
-	int count=0;
-	while(a)
-	{
-		a>>=1;
-		count++;
-	}
-	int ans=1;count--;
-	while(count--)
-	{
-		ans<<=1;
-	}
-
+	int ans=0;
+	if(a%4==0)
+		ans=a;
+	else if(a%4==3)
+		ans=0;
+	else if(a%4==1)
+		ans=1;
+	else
+		ans=a+1;
 	cout<<ans<<"\n";
 }
