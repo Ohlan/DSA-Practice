@@ -7,11 +7,19 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-int josephus(int n, int k)
+void permute(string s,int i=0)
 {
-    if(n==1)
-    	return 1;
-    return (josephus(n-1,k)+k-1)%n+1;
+    if(i==s.length()-1)
+    {
+    	cout<<s<<" ";
+    	return;
+    }
+    for(int j=i;j<s.length();j++)
+    {
+    	swap(s[i],s[j]);
+    	permute(s,i+1);
+    	swap(s[i],s[j]);
+    }
 }
 
 int main()
@@ -28,7 +36,9 @@ int main()
 
 void solve()
 {
-	int n,k;
-	cin>>n>>k;
-	cout<<josephus(n,k)<<"\n";
+	string s;
+	cin>>s;
+	sort(s.begin(),s.end());
+	permute(s);
+	cout<<"\n";
 }
