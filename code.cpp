@@ -23,10 +23,25 @@ int main()
 
 void solve()
 {
-	int a,b;
-	cin>>a>>b;
-	a^=b;
-	b^=a;
-	a^=b;
-	cout<<a<<" "<<b<<"\n";
+	int a;
+	cin>>a;
+	if(a==0)
+	{
+		cout<<0<<"\n";
+		return;
+	}
+
+	int count=0;
+	while(a)
+	{
+		a>>=1;
+		count++;
+	}
+	int ans=1;count--;
+	while(count--)
+	{
+		ans<<=1;
+	}
+
+	cout<<ans<<"\n";
 }
