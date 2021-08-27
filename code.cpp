@@ -7,7 +7,19 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
+bool find(int n, int m)
+{
+    if(n%m==0)
+        return false;
+    if(n<m)
+        return true;
+    n=n-(n/m);
+    return find(n,m+1);
+}
 
+bool isLucky(int n) {
+    return find(n,2);
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -25,14 +37,5 @@ void solve()
 {
 	int a;
 	cin>>a;
-	int ans=0;
-	if(a%4==0)
-		ans=a;
-	else if(a%4==3)
-		ans=0;
-	else if(a%4==1)
-		ans=1;
-	else
-		ans=a+1;
-	cout<<ans<<"\n";
+	cout<<isLucky(a)<<"\n";
 }
