@@ -17,58 +17,23 @@ typedef struct node
 	}
 }node;
 void solve();
-void spiral(node* root)
+int height(node* root)
+{
+	if(root==NULL)
+		return 0;
+	return max(height(root->left),height(root->right))+1;
+
+}
+bool isbalanced(node* root)
 {
 	if(!root)
-		return;
-
-	queue<node*> q;
-	q.push(root);
-	q.push(NULL);
-	int flag=0;
-	while(!q.empty())
-	{
-		node* temp=q.front();
-		if(temp)
-		{
-			while(q.front()!=NULL)
-			{
-				cout<<temp->data<<" ";
-				if(flag==0)
-				{
-					if(temp->right)
-					{
-						q.push(temp->right);
-					}
-					if(temp->left)
-					{
-						q.push(temp->left);
-					}
-				}
-				else
-				{
-					if(temp->left)
-					{
-						q.push(temp->left);
-					}
-					if(temp->right)
-					{
-						q.push(temp->right);
-					}
-				}
-				
-				q.pop();
-				temp=q.front();
-			}
-			cout<<"\n";
-			q.push(NULL);
-		}
-		if(flag==0)
-			flag=1;
-		else
-			flag=0;
-		q.pop();
-	}
+		return true;
+	int lh=height(root->left);
+	int rh=height(root->right);
+	if(abs(lh-rh)<=1&&(isbalanced(root->left))&&(isbalanced(root->right)))
+		return true;
+	else
+		return false;
 }
 int main()
 {
@@ -92,5 +57,5 @@ void solve()
     root->left->left->right = new node(1);
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
-    spiral(root);
+    cout<<isbalanced(root);
 }
