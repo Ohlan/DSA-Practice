@@ -7,14 +7,11 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-int power(int x, unsigned int y)
+int josephus(int n, int k)
 {
-    if (y == 0)
-        return 1;
-    else if (y % 2 == 0)
-        return power(x, y / 2) * power(x, y / 2);
-    else
-        return x * power(x, y / 2) * power(x, y / 2);
+    if(n==1)
+    	return 1;
+    return (josephus(n-1,k)+k-1)%n+1;
 }
 
 int main()
@@ -25,14 +22,13 @@ int main()
 	int t;
 	cin>>t;
 	while(t--)
-		solve();
-	
+		solve();	
 	return 0;
 }
 
 void solve()
 {
-	int a,e;
-	cin>>a>>e;
-	cout<<power(a,e)<<"\n";
+	int n,k;
+	cin>>n>>k;
+	cout<<josephus(n,k)<<"\n";
 }
