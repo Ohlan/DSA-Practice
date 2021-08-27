@@ -5,35 +5,61 @@ using namespace std;
 #define vi vector<int>
 #define ull unsigned long long
 typedef pair<int,int> ii;
-typedef struct node
-{
-	int data;
-	node* left;
-	node* right;
-	node(int data)
-	{
-		this->data=data;
-		left=right=NULL;
-	}
+typedef struct node {
+    char data;
+    struct node *left, *right;
 }node;
-void solve();
-int height(node* root)
+ 
+node* newNode(char item)
 {
-	if(root==NULL)
-		return 0;
-	return max(height(root->left),height(root->right))+1;
-
+    node* temp = new node;
+    temp->data = item;
+    temp->left = temp->right = NULL;
+    return temp;
 }
-void verticalWidth(node* root,int& min,int& max,int count=0)
-{
+void solve();
+void getInorder(node* root, char InT[],int &i)
+{	
 	if(!root)
+	{
+		InT[i++]='$';
 		return;
-	if(count<min)
-		min=count;
-	if(count>max)
-		max=count;
-	verticalWidth(root->left,min,max,count-1);
-	verticalWidth(root->right,min,max,count+1);
+	}
+	getInorder(root->left,InT,i);
+	InT[i++]=root->data;
+	getInorder(root->right,InT,i);
+}
+void getPreorder(node* root, char InT[],int &i)
+{	
+	if(!root)
+	{
+		InT[i++]='$';
+		return;
+	}
+	InT[i++]=root->data;
+	getPreorder(root->left,InT,i);
+	
+	getPreorder(root->right,InT,i);
+}
+bool isSubtree(node* root,node* sub)
+{
+	if(!sub)
+		return true;
+	if(!root)
+		return false;
+	char InT[100],InS[100];
+	int i=0,j=0;
+	getInorder(root,InT,i);
+	getInorder(sub,InS,j);
+	InT[i]='\0',InS[j]='\0';
+	char PreT[100],PreS[100];
+	getPreorder(root,PreT,i);
+	i=0,j=0;
+	getPreorder(sub,PreS,j);
+	if(strstr(InT,InS)==NULL)
+		return false;
+
+	return (strstr(PreT,PreS)!=NULL);
 }
 int main()
 {
@@ -50,14 +76,20 @@ int main()
 
 void solve()
 {
-	node *root = new node(6);
-    root->left = new node(3);
-    root->right = new node(7);
-    root->left->left = new node(2);
-    root->left->left->right = new node(1);
-    root->left->right = new node(5);
-    root->left->right->left = new node(4); 
-    int min=1,max=-1;
-    verticalWidth(root,min,max);
-    cout<<max-min+1<<"\n";
+	node* T = newNode('a');
+    T->left = newNode('b');
+    T->right = newNode('d');
+    T->left->left = newNode('c');
+    T->right->right = newNode('e');
+ 
+    node* S = newNode('a');
+    S->left = newNode('b');
+    S->left->left = newNode('c');
+    S->right = newNode('d');
+ 
+    if (isSubtree(T, S))
+        cout << "Yes: S is a subtree of T";
+    else
+        cout << "No: S is NOT a subtree of T";
+
 }
