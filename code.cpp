@@ -6,20 +6,23 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-
-void permute(string s,int i=0)
+string s[10]={"","","ABC","DEF","GHI","JKL","MNO","PQRS","TUV","WXYZ"};
+void getres(int a[], int n,int i=0,string p="")
 {
-    if(i==s.length()-1)
+    
+    for(int j=0;j<s[a[i]].length();j++)
     {
-    	cout<<s<<" ";
-    	return;
+        p+=s[a[i]][j];
+        if(i<n-1)
+            getres(a,n,i+1,p);
+        else
+            cout<<p<<" ";
+        p.pop_back();
     }
-    for(int j=i;j<s.length();j++)
-    {
-    	swap(s[i],s[j]);
-    	permute(s,i+1);
-    	swap(s[i],s[j]);
-    }
+}
+void possibleWords(int a[], int n)
+{
+    getres(a,n);
 }
 
 int main()
@@ -36,9 +39,12 @@ int main()
 
 void solve()
 {
-	string s;
-	cin>>s;
-	sort(s.begin(),s.end());
-	permute(s);
-	cout<<"\n";
+	int n;
+	cin>>n;
+	int a[n];
+	for(int i=0;i<n;i++)
+	{
+		cin>>a[i];
+	}
+	possibleWords(a,n);
 }
