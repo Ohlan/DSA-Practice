@@ -24,16 +24,16 @@ int height(node* root)
 	return max(height(root->left),height(root->right))+1;
 
 }
-bool isbalanced(node* root)
+void verticalWidth(node* root,int& min,int& max,int count=0)
 {
 	if(!root)
-		return true;
-	int lh=height(root->left);
-	int rh=height(root->right);
-	if(abs(lh-rh)<=1&&(isbalanced(root->left))&&(isbalanced(root->right)))
-		return true;
-	else
-		return false;
+		return;
+	if(count<min)
+		min=count;
+	if(count>max)
+		max=count;
+	verticalWidth(root->left,min,max,count-1);
+	verticalWidth(root->right,min,max,count+1);
 }
 int main()
 {
@@ -57,5 +57,7 @@ void solve()
     root->left->left->right = new node(1);
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
-    cout<<isbalanced(root);
+    int min=1,max=-1;
+    verticalWidth(root,min,max);
+    cout<<max-min+1<<"\n";
 }
