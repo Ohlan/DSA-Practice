@@ -23,7 +23,10 @@ int main()
 
 void solve()
 {
-	int n;
-	cin>>n;
-	cout<<!(n&(n-1))<<"\n";
+	int a,b;
+	cin>>a>>b;
+	a^=b;
+	b^=a;
+	a^=b;
+	cout<<a<<" "<<b<<"\n";
 }
