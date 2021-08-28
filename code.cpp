@@ -9,25 +9,16 @@ typedef pair<int,int> ii;
 void solve();
 int getpairs(int a[],int n,int k)
 {
-	sort(a,a+n);
-    int i=0,j=n-1;
-    int res=0;
-    while(i<j)
-    {
-        if(a[i]+a[j]==k)
-        {
-            res++;
-            i++,j--;
-            
+	unordered_map<int, int> m;
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (m.find(k - a[i]) != m.end()) {
+            count += m[k - a[i]];
         }
-        else if(a[i]+a[j]>k)
-        {
-            j--;
-        }
-        else
-            i++;
+        m[a[i]]++;
     }
-    return res;
+    return count;   
+    
 }
 
 int main()
