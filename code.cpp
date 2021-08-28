@@ -7,47 +7,27 @@ using namespace std;
 
 typedef pair<int,int> ii;
 void solve();
-void swap(int* a,int* b)
+int getpairs(int a[],int n,int k)
 {
-	int temp=(*a);
-	(*a)=(*b);
-	(*b)=temp;
-}
-
-int randPartition(int a[],int l,int r)
-{
-	int n = r-l+1; 
-    int pivot = rand() % n; 
-    swap(&a[l + pivot], &a[r]); 
-	pivot=a[r];
-	int i=l;
-	for(int j=i;j<r;j++)
-	{
-		if(a[j]<=pivot)
-		{
-			swap(&a[i],&a[j]);
-			i++;
-		}
-	}
-	swap(&a[i],&a[r]);
-	return i;
-}
-
-
-int kthMin(int a[], int l, int r, int k)
-{
-    if(l<=r)
+	sort(a,a+n);
+    int i=0,j=n-1;
+    int res=0;
+    while(i<j)
     {
-    	int pos=randPartition(a,l,r);
-    	
-    	if(pos==k-1)
-    		return a[pos];
-    	if(pos>k-1)
-    		return kthMin(a,l,pos-1,k);
-    	return kthMin(a,pos+1,r,k);
+        if(a[i]+a[j]==k)
+        {
+            res++;
+            i++,j--;
+            
+        }
+        else if(a[i]+a[j]>k)
+        {
+            j--;
+        }
+        else
+            i++;
     }
-
-    return mod;
+    return res;
 }
 
 int main()
@@ -71,7 +51,7 @@ void solve()
 	{
 		cin>>a[i];
 	}
-	int min=kthMin(a,0,n-1,k);
-	cout<<min<<"\n";
+	int count=getpairs(a,n,k);
+	cout<<count<<"\n";
 	
 }
