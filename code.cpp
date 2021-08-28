@@ -7,20 +7,20 @@ using namespace std;
 
 typedef pair<int,int> ii;
 void solve();
-int getpairs(int a[],int n,int k)
+bool subArrayExists(int a[], int n)
 {
-	unordered_map<int, int> m;
-    int count = 0;
-    for (int i = 0; i < n; i++) {
-        if (m.find(k - a[i]) != m.end()) {
-            count += m[k - a[i]];
-        }
-        m[a[i]]++;
+    map<int,int> mp;
+    int sum=0;
+    for(int i=0;i<n;i++)
+    {
+        sum+=a[i];
+        if(mp[sum]==1||sum==0)
+            return true;
+        
+        mp[sum]=1;
     }
-    return count;   
-    
+    return false;
 }
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -35,14 +35,14 @@ int main()
 
 void solve()
 {
-	int n,k;
-	cin>>n>>k;
+	int n;
+	cin>>n;
 	int a[n];
 	for(int i=0;i<n;i++)
 	{
 		cin>>a[i];
 	}
-	int count=getpairs(a,n,k);
-	cout<<count<<"\n";
+	
+	cout<<subArrayExists(a,n)<<"\n";
 	
 }
