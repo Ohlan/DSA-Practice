@@ -4,25 +4,50 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
+
 typedef pair<int,int> ii;
 void solve();
-string s[10]={"","","ABC","DEF","GHI","JKL","MNO","PQRS","TUV","WXYZ"};
-void getres(int a[], int n,int i=0,string p="")
+void swap(int* a,int* b)
 {
-    
-    for(int j=0;j<s[a[i]].length();j++)
-    {
-        p+=s[a[i]][j];
-        if(i<n-1)
-            getres(a,n,i+1,p);
-        else
-            cout<<p<<" ";
-        p.pop_back();
-    }
+	int temp=(*a);
+	(*a)=(*b);
+	(*b)=temp;
 }
-void possibleWords(int a[], int n)
+
+int randPartition(int a[],int l,int r)
 {
-    getres(a,n);
+	int n = r-l+1; 
+    int pivot = rand() % n; 
+    swap(&a[l + pivot], &a[r]); 
+	pivot=a[r];
+	int i=l;
+	for(int j=i;j<r;j++)
+	{
+		if(a[j]<=pivot)
+		{
+			swap(&a[i],&a[j]);
+			i++;
+		}
+	}
+	swap(&a[i],&a[r]);
+	return i;
+}
+
+
+int kthMin(int a[], int l, int r, int k)
+{
+    if(l<=r)
+    {
+    	int pos=randPartition(a,l,r);
+    	
+    	if(pos==k-1)
+    		return a[pos];
+    	if(pos>k-1)
+    		return kthMin(a,l,pos-1,k);
+    	return kthMin(a,pos+1,r,k);
+    }
+
+    return mod;
 }
 
 int main()
@@ -39,12 +64,14 @@ int main()
 
 void solve()
 {
-	int n;
-	cin>>n;
+	int n,k;
+	cin>>n>>k;
 	int a[n];
 	for(int i=0;i<n;i++)
 	{
 		cin>>a[i];
 	}
-	possibleWords(a,n);
+	int min=kthMin(a,0,n-1,k);
+	cout<<min<<"\n";
+	
 }
