@@ -4,29 +4,53 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
-
+#define MIN -1000000
 typedef pair<int,int> ii;
 void solve();
-bool subArrayExists(int a[], int n)
-{
-    map<int,int> mp;
-    int sum=0;
-    for(int i=0;i<n;i++)
+
+
+    bool areIsomorphic(string a, string b)
     {
-        sum+=a[i];
-        if(mp[sum]==1||sum==0)
-            return true;
+        int n=a.length();
+        int m=b.length();
+        if(n!=m)
+            return false;
+            
+        map<char,int>m1;
+        map<char,int>m2;
         
-        mp[sum]=1;
+        for(int i=0;i<n;i++)
+        {
+            if(m1.count(a[i])==0)
+            {
+                if(m2.count(b[i])!=0)
+                    return false;
+                else
+                {
+                    m1[a[i]]=i;
+                    m2[b[i]]=i;
+                }
+            }
+            else
+            {
+                if(b[m1[a[i]]]!=b[i])
+                    return false;
+                else
+                {
+                    m1[a[i]]=i;
+                    m2[b[i]]=i;
+                }
+            }
+        }
+        return true;
     }
-    return false;
-}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-	int t;
+	ll t;
 	cin>>t;
 	while(t--)
 		solve();	
@@ -35,14 +59,8 @@ int main()
 
 void solve()
 {
-	int n;
-	cin>>n;
-	int a[n];
-	for(int i=0;i<n;i++)
-	{
-		cin>>a[i];
-	}
-	
-	cout<<subArrayExists(a,n)<<"\n";
+	string a,b;
+	cin>>a>>b;
+	cout<<areIsomorphic(a,b)<<"\n";
 	
 }
