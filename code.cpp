@@ -8,33 +8,18 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-
-bool knows(vector<vector<int> >& M,int a,int b)
+void insertBottom(stack<int>& s,int e)
 {
-    return M[a][b];
-}
-int findCelebrity(vector<vector<int> >& M, int n)
-{
-	int i=0,j=n-1;
-	while(i<j)
+	if(s.empty())
+		s.push(e);
+	else
 	{
-		if(knows(M,i,j))
-			i++;
-		else
-			j--;
+		int a=s.top();
+		s.pop();
+		insertBottom(s,e);
+		s.push(a);
 	}
-
-	int c=i;
-	for(int i=0;i<n;i++)
-	{
-		if(i!=c)
-			if(knows(M,c,i)||!knows(M,i,c))
-				return -1;
-	}
-	return c;
 }
-    
-
 
 int main()
 {
@@ -50,12 +35,18 @@ int main()
 
 void solve()
 {
-	vector<vector<int>> M{{0, 0, 1, 0},
-			             {0, 0, 1, 0},
-			             {0, 0, 0, 0},
-			             {0, 0, 1, 0}};
-    int n = 4;
-    int id = findCelebrity(M,n);
-    id == -1 ? cout << "No celebrity" :
-               cout << "Celebrity ID " << id;
+	stack<int> s;
+	int n;
+	cin>>n;
+	for(int i=1;i<=n;i++)
+		s.push(i);
+	
+	insertBottom(s,n+1);
+
+	while(!s.empty())
+	{
+		cout<<s.top()<<" ";
+		s.pop();
+	}
+	cout<<"\n";
 }
