@@ -7,38 +7,43 @@ using namespace std;
 #define MIN -1000000000
 typedef pair<int,int> ii;
 void solve();
-vector<long long> nextLargerElement(vector<long long> a, int n)
-{
-    stack<long long> s; 
-    if(n>=1)
-        s.push(a[0]);
-    map<long long, long long> mp;
-    for(int i=1;i<n;i++)
+
+
+	bool knows(vector<vector<int> >& M,int a,int b)
     {
-        if(a[i]<=s.top())
-            s.push(a[i]);
-        else
+        return M[a][b];
+    }
+    int findCelebrity(vector<vector<int> >& M, int n) 
+    {
+        stack<int> s;
+        for(int i=0;i<n;i++)
+            s.push(i);
+        
+        while(s.size()>1)
         {
-            while(s.empty()!=true&&s.top()<a[i])
-            {
-               mp[s.top()]=a[i];
-                s.pop();
-            }
-            s.push(a[i]);
+            int a=s.top();
+            s.pop();
+            int b=s.top();
+            s.pop();
+            if(knows(M,a,b))
+                s.push(b);
+            else
+                s.push(a);
+            
         }
+        int c=s.top();
+        
+        for(int i=0;i<n;i++)
+        {
+            if((i!=c)&&(knows(M,i,c)==false||knows(M,c,i)))
+                return -1;
+        }
+        
+        return c;
+        
     }
-    while(s.empty()!=true)
-    {
-        mp[s.top()]=-1;
-        s.pop();
-    }
-    vector<long long> res(n);
-    for(int i=0;i<n;i++)
-    {
-        res[i]=mp[a[i]];
-    }
-    return res;
-}
+
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -53,13 +58,12 @@ int main()
 
 void solve()
 {
-	int n;
-	cin>>n;
-	vector<ll> a(n);
-	for(auto &x:a)
-		cin>>x;
-	vector<ll> b=nextLargerElement(a,n);
-	for(auto x:b)
-		cout<<x<<" ";
-	cout<<"\n";
+	vector<vector<int>> M{{0, 0, 1, 0},
+			             {0, 0, 1, 0},
+			             {0, 0, 0, 0},
+			             {0, 0, 1, 0}};
+    int n = 4;
+    int id = findCelebrity(M,n);
+    id == -1 ? cout << "No celebrity" :
+               cout << "Celebrity ID " << id;
 }
