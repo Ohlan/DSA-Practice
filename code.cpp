@@ -8,26 +8,36 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-void insertBottom(stack<int>& s,int e)
+void insertAtpos(stack<int>&s,int a)
 {
-	if(s.empty())
-		s.push(e);
-	else
-	{
-		int a=s.top();
-		s.pop();
-		insertBottom(s,e);
-		s.push(a);
-	}
+    if(s.empty())
+    {
+        s.push(a);
+    }
+    else
+    {
+        if(s.top()<a)
+        {
+            s.push(a);
+        }
+        else
+        {
+            int b=s.top();
+            s.pop();
+            insertAtpos(s,a);
+            s.push(b);
+        }
+    }
 }
-void reverseStack(stack<int>&s)
+void sortStack(stack<int>&s)
 {
-	if(s.empty())
-		return;
-	int a=s.top();
-	s.pop();
-	reverseStack(s);
-	insertBottom(s,a);
+    if(s.empty())
+        return;
+    
+    int a=s.top();
+    s.pop();
+    sortStack(s);
+    insertAtpos(s,a);
 }
 int main()
 {
@@ -46,10 +56,10 @@ void solve()
 	stack<int> s;
 	int n;
 	cin>>n;
-	for(int i=1;i<=n;i++)
+	for(int i=n;i>=0;i--)
 		s.push(i);
 	
-	reverseStack(s);
+	sortStack(s);
 
 	while(!s.empty())
 	{
