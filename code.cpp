@@ -20,7 +20,15 @@ void insertBottom(stack<int>& s,int e)
 		s.push(a);
 	}
 }
-
+void reverseStack(stack<int>&s)
+{
+	if(s.empty())
+		return;
+	int a=s.top();
+	s.pop();
+	reverseStack(s);
+	insertBottom(s,a);
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -41,7 +49,7 @@ void solve()
 	for(int i=1;i<=n;i++)
 		s.push(i);
 	
-	insertBottom(s,n+1);
+	reverseStack(s);
 
 	while(!s.empty())
 	{
