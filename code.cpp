@@ -8,42 +8,70 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-int count(string s){
-    int ans=0;
-    int n=s.length();
-    int a=0,b=0;
+vector<long long> nextSmallerElementL2R(vector<long long> a, int n)
+{
+    stack<long long> s; 
+    if(n>=1)
+        s.push(a[0]);
+    map<long long, long long> mp;
+    for(int i=1;i<n;i++)
+    {
+        if(a[i]>=s.top())
+            s.push(a[i]);
+        else
+        {
+            while(s.empty()!=true&&s.top()>a[i])
+            {
+               mp[s.top()]=i;
+                s.pop();
+            }
+            s.push(a[i]);
+        }
+    }
+    while(s.empty()!=true)
+    {
+        mp[s.top()]=n;
+        s.pop();
+    }
+    vector<long long> res(n);
     for(int i=0;i<n;i++)
     {
-        if(s[i]=='A')
-            a++;
-        else
-            b++;
-        if(a<b)
-        {
-            s[i]='A';
-            a++;
-            b--;
-            ans++;
-        }
-        
+        res[i]=mp[a[i]];
     }
-    a=0;b=0;
-    for(int i=n-1;i>=0;i--)
+    return res;
+}
+
+vector<long long> nextSmallerElementR2L(vector<long long> a, int n)
+{
+    stack<long long> s; 
+    if(n>=1)
+        s.push(a[n-1]);
+    map<long long, long long> mp;
+    for(int i=n-2;i>=0;i--)
     {
-        if(s[i]=='A')
-            a++;
+        if(a[i]>=s.top())
+            s.push(a[i]);
         else
-            b++;
-        if(a>b)
         {
-            s[i]='B';
-            a--;
-            b++;
-            ans++;
+            while(s.empty()!=true&&s.top()>a[i])
+            {
+               mp[s.top()]=i;
+                s.pop();
+            }
+            s.push(a[i]);
         }
-            
     }
-    return ans;
+    while(s.empty()!=true)
+    {
+        mp[s.top()]=-1;
+        s.pop();
+    }
+    vector<long long> res(n);
+    for(int i=0;i<n;i++)
+    {
+        res[i]=mp[a[i]];
+    }
+    return res;
 }
 
 int main()
@@ -60,7 +88,21 @@ int main()
 
 void solve()
 {
-	string s;
-	cin>>s;
-	cout<<count(s)<<"\n";
+	ll n;
+	cin>>n;
+	vector<ll> a(n);
+	for(auto &x:a)
+		cin>>x;
+	vector<ll> b=nextSmallerElementL2R(a,n);
+	vector<ll> c=nextSmallerElementR2L(a,n);
+	ll max=0,curr=0,i=0;
+
+	for(auto x:a)
+	{
+		curr=x*(b[i]-c[i]-1);
+		if(curr>max)
+			max=curr;
+		i++;
+	}
+	cout<<max<<"\n";
 }
