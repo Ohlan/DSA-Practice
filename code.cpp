@@ -8,37 +8,44 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-void insertAtpos(stack<int>&s,int a)
-{
-    if(s.empty())
+int count(string s){
+    int ans=0;
+    int n=s.length();
+    int a=0,b=0;
+    for(int i=0;i<n;i++)
     {
-        s.push(a);
-    }
-    else
-    {
-        if(s.top()<a)
-        {
-            s.push(a);
-        }
+        if(s[i]=='A')
+            a++;
         else
+            b++;
+        if(a<b)
         {
-            int b=s.top();
-            s.pop();
-            insertAtpos(s,a);
-            s.push(b);
+            s[i]='A';
+            a++;
+            b--;
+            ans++;
         }
+        
     }
+    a=0;b=0;
+    for(int i=n-1;i>=0;i--)
+    {
+        if(s[i]=='A')
+            a++;
+        else
+            b++;
+        if(a>b)
+        {
+            s[i]='B';
+            a--;
+            b++;
+            ans++;
+        }
+            
+    }
+    return ans;
 }
-void sortStack(stack<int>&s)
-{
-    if(s.empty())
-        return;
-    
-    int a=s.top();
-    s.pop();
-    sortStack(s);
-    insertAtpos(s,a);
-}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -53,18 +60,7 @@ int main()
 
 void solve()
 {
-	stack<int> s;
-	int n;
-	cin>>n;
-	for(int i=n;i>=0;i--)
-		s.push(i);
-	
-	sortStack(s);
-
-	while(!s.empty())
-	{
-		cout<<s.top()<<" ";
-		s.pop();
-	}
-	cout<<"\n";
+	string s;
+	cin>>s;
+	cout<<count(s)<<"\n";
 }
