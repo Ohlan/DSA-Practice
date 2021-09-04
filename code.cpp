@@ -7,71 +7,37 @@ using namespace std;
 #define MIN -1000000000
 typedef pair<int,int> ii;
 void solve();
-
-vector<long long> nextSmallerElementL2R(vector<long long> a, int n)
+ll getLargestAreaHistogram(vector<ll> a, ll n)
 {
-    stack<long long> s; 
-    if(n>=1)
-        s.push(a[0]);
-    map<long long, long long> mp;
-    for(int i=1;i<n;i++)
-    {
-        if(a[i]>=s.top())
-            s.push(a[i]);
-        else
-        {
-            while(s.empty()!=true&&s.top()>a[i])
-            {
-               mp[s.top()]=i;
-                s.pop();
-            }
-            s.push(a[i]);
-        }
-    }
-    while(s.empty()!=true)
-    {
-        mp[s.top()]=n;
-        s.pop();
-    }
-    vector<long long> res(n);
-    for(int i=0;i<n;i++)
-    {
-        res[i]=mp[a[i]];
-    }
-    return res;
-}
+	stack<ll> s;
+	ll max_area=0;
+	ll curr_area=0;
+	ll i=0;
+	while(i<n)
+	{
+		if(s.empty()||a[i]>=a[s.top()])
+			s.push(i++);
+		else
+		{
+			ll tp=s.top();
+			s.pop();
 
-vector<long long> nextSmallerElementR2L(vector<long long> a, int n)
-{
-    stack<long long> s; 
-    if(n>=1)
-        s.push(a[n-1]);
-    map<long long, long long> mp;
-    for(int i=n-2;i>=0;i--)
-    {
-        if(a[i]>=s.top())
-            s.push(a[i]);
-        else
-        {
-            while(s.empty()!=true&&s.top()>a[i])
-            {
-               mp[s.top()]=i;
-                s.pop();
-            }
-            s.push(a[i]);
-        }
-    }
-    while(s.empty()!=true)
-    {
-        mp[s.top()]=-1;
-        s.pop();
-    }
-    vector<long long> res(n);
-    for(int i=0;i<n;i++)
-    {
-        res[i]=mp[a[i]];
-    }
-    return res;
+			curr_area=a[tp]*(s.empty()?i:i-(s.top())-1);
+			if(curr_area>max_area)
+				max_area=curr_area;
+		}
+	}
+	while(!s.empty())
+	{
+		ll tp=s.top();
+		s.pop();
+
+		curr_area=a[tp]*(s.empty()?i:i-s.top()-1);
+		if(curr_area>max_area)
+			max_area=curr_area;
+		cout<<curr_area<<" ";
+	}
+	return max_area;
 }
 
 int main()
@@ -93,16 +59,7 @@ void solve()
 	vector<ll> a(n);
 	for(auto &x:a)
 		cin>>x;
-	vector<ll> b=nextSmallerElementL2R(a,n);
-	vector<ll> c=nextSmallerElementR2L(a,n);
-	ll max=0,curr=0,i=0;
-
-	for(auto x:a)
-	{
-		curr=x*(b[i]-c[i]-1);
-		if(curr>max)
-			max=curr;
-		i++;
-	}
-	cout<<max<<"\n";
+	
+	cout<<getLargestAreaHistogram(a,n)<<"\n";
+	
 }
