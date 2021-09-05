@@ -45,44 +45,26 @@ node* scanlist(int n)
 	}
 	return head;
 }
-node* reverseInGroup2(node* head,int k)
+void removeDuplicate(node* head)
 {
 	if(!head)
-		return NULL;
-	node* curr=head;
-	node* prev=NULL;
-
-	stack<node*>s;
+		return;
+	node* curr=head->next;
+	node* prev=head;
+	
 	while(curr)
 	{	
-		
-		int i=1;
-		while(curr&&i<=k)
+		if(curr->data==prev->data)
 		{
-			s.push(curr);
-			curr=curr->next;		
-			i++;
+			prev->next=curr->next;
+			curr=curr->next;
 		}
-		
-		while(!s.empty())
+		else
 		{
-			if(prev==NULL)
-			{
-				prev=s.top();
-				head=prev;
-				s.pop();
-			}
-			else
-			{
-				prev->next=s.top();
-				prev=prev->next;
-				s.pop();
-			}
+			prev=curr;
+			curr=curr->next;
 		}
-		
 	}
-	prev->next=NULL;
-	return head;
 }
 int main()
 {
@@ -98,14 +80,11 @@ int main()
 }
 void solve()
 {
-	int n,k;
-	cin>>n>>k;
+	int n;
+	cin>>n;
 	node* head=scanlist(n);
 
-	head=reverseInGroup2(head,k);
-	printlist(head);
-	cout<<"\n";
-	head=reverseInGroup2(head,k);
+	removeDuplicate(head);
 	printlist(head);
 	cout<<"\n";
 }
