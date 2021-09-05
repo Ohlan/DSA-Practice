@@ -45,26 +45,45 @@ node* scanlist(int n)
 	}
 	return head;
 }
-void removeDuplicate(node* head)
+
+node* addOne(node* head)
 {
 	if(!head)
-		return;
-	node* curr=head->next;
-	node* prev=head;
-	
-	while(curr)
-	{	
-		if(curr->data==prev->data)
-		{
-			prev->next=curr->next;
-			curr=curr->next;
-		}
-		else
-		{
-			prev=curr;
-			curr=curr->next;
-		}
+		return NULL;
+	node* last=NULL,*curr=head;
+	while(curr->next)
+	{
+		if(curr->data!=9)
+			last=curr;
+		curr=curr->next;
 	}
+	if(curr->data!=9)
+	{
+		curr->data++;
+		return head;
+	}
+	if(last==NULL)
+	{
+		node* t=new node(1);
+		t->next=head;
+		curr=head;
+		while(curr)
+		{
+			curr->data=0;
+			curr=curr->next;
+		}
+		return t;
+	}
+	
+	(last->data)+=1;
+	curr=last->next;
+	while(curr)
+	{
+		curr->data=0;
+		curr=curr->next;
+	}
+	return head;
+	
 }
 int main()
 {
@@ -84,7 +103,6 @@ void solve()
 	cin>>n;
 	node* head=scanlist(n);
 
-	removeDuplicate(head);
+	head=addOne(head);
 	printlist(head);
-	cout<<"\n";
 }
