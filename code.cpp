@@ -7,37 +7,38 @@ using namespace std;
 #define MIN -1000000000
 typedef pair<int,int> ii;
 void solve();
-ll getLargestAreaHistogram(vector<ll> a, ll n)
+int longestValidSubstring(string s)
 {
-	stack<ll> s;
-	ll max_area=0;
-	ll curr_area=0;
-	ll i=0;
-	while(i<n)
+	int n=s.length();
+	int l=0,r=0,maxi=0;
+	for(int i=0;i<n;i++)
 	{
-		if(s.empty()||a[i]>=a[s.top()])
-			s.push(i++);
+		if(s[i]=='(')
+			l++;
 		else
+			r++;
+		if(l==r)
+			maxi=max(maxi,2*r);
+		else if(r>l)
 		{
-			ll tp=s.top();
-			s.pop();
-
-			curr_area=a[tp]*(s.empty()?i:i-(s.top())-1);
-			if(curr_area>max_area)
-				max_area=curr_area;
+			l=0;r=0;
 		}
 	}
-	while(!s.empty())
+	l=r=0;
+	for(int i=n-1;i>=0;i--)
 	{
-		ll tp=s.top();
-		s.pop();
-
-		curr_area=a[tp]*(s.empty()?i:i-s.top()-1);
-		if(curr_area>max_area)
-			max_area=curr_area;
-		cout<<curr_area<<" ";
+		if(s[i]=='(')
+			l++;
+		else
+			r++;
+		if(l==r)
+			maxi=max(maxi,2*l);
+		else if(l>r)
+		{
+			l=0;r=0;
+		}
 	}
-	return max_area;
+	return maxi;
 }
 
 int main()
@@ -54,12 +55,8 @@ int main()
 
 void solve()
 {
-	ll n;
-	cin>>n;
-	vector<ll> a(n);
-	for(auto &x:a)
-		cin>>x;
-	
-	cout<<getLargestAreaHistogram(a,n)<<"\n";
+	string s;
+	cin>>s;
+	cout<<longestValidSubstring(s)<<"\n";
 	
 }
