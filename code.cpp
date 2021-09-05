@@ -4,43 +4,66 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
-#define MIN -1000000000
 typedef pair<int,int> ii;
-void solve();
-int longestValidSubstring(string s)
+typedef struct node
 {
-	int n=s.length();
-	int l=0,r=0,maxi=0;
-	for(int i=0;i<n;i++)
+	int data;
+	node* next;
+	
+	node(int data=0)
 	{
-		if(s[i]=='(')
-			l++;
-		else
-			r++;
-		if(l==r)
-			maxi=max(maxi,2*r);
-		else if(r>l)
-		{
-			l=0;r=0;
-		}
+		this->data=data;
+		next=NULL;
 	}
-	l=r=0;
-	for(int i=n-1;i>=0;i--)
+}node;
+void solve();
+void printlist(node* head)
+{
+	while(head)
 	{
-		if(s[i]=='(')
-			l++;
-		else
-			r++;
-		if(l==r)
-			maxi=max(maxi,2*l);
-		else if(l>r)
-		{
-			l=0;r=0;
-		}
+		cout<<head->data<<" ";
+		head=head->next;
 	}
-	return maxi;
+	cout<<"\n";
 }
-
+node* scanlist(int n)
+{
+	if(n<=0)
+		return NULL;
+	node* head=new node();
+	cin>>head->data;
+	head->next=NULL;
+	node* prev=head;
+	n--;
+	while(n--)
+	{
+		node* temp=new node();
+		cin>>temp->data;
+		temp->next=NULL;
+		prev->next=temp;
+		prev=prev->next;
+	}
+	return head;
+}
+node* reverseInGroup(node* head,int k)
+{
+	if(!head)
+		return NULL;
+	node* curr=head;
+	node* prev=NULL;
+	node* next=NULL;
+	int i=1;
+	while(curr&&i<=k)
+	{
+		next=curr->next;
+		curr->next=prev;
+		prev=curr;
+		curr=next;		
+		i++;
+	}
+	head->next=reverseInGroup(curr,k);
+	return prev;
+}
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -49,14 +72,20 @@ int main()
 	int t;
 	cin>>t;
 	while(t--)
-		solve();	
+		solve();
+	
 	return 0;
 }
-
 void solve()
 {
-	string s;
-	cin>>s;
-	cout<<longestValidSubstring(s)<<"\n";
-	
+	int n,k;
+	cin>>n>>k;
+	node* head=scanlist(n);
+
+	head=reverseInGroup(head,k);
+	printlist(head);
+	cout<<"\n";
+	head=reverseInGroup(head,k);
+	printlist(head);
+	cout<<"\n";
 }
