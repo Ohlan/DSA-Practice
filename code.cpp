@@ -5,85 +5,51 @@ using namespace std;
 #define vi vector<int>
 #define ull unsigned long long
 typedef pair<int,int> ii;
-typedef struct node
-{
-	int data;
-	node* next;
-	
-	node(int data=0)
-	{
-		this->data=data;
-		next=NULL;
-	}
-}node;
 void solve();
-void printlist(node* head)
-{
-	while(head)
-	{
-		cout<<head->data<<" ";
-		head=head->next;
-	}
-	cout<<"\n";
-}
-node* scanlist(int n)
-{
-	if(n<=0)
-		return NULL;
-	node* head=new node();
-	cin>>head->data;
-	head->next=NULL;
-	node* prev=head;
-	n--;
-	while(n--)
-	{
-		node* temp=new node();
-		cin>>temp->data;
-		temp->next=NULL;
-		prev->next=temp;
-		prev=prev->next;
-	}
-	return head;
-}
+int maxPalindromeSubstr(string s) {
+    int n=s.length();
+    bool palin[n][n];
+    for(int i=0;i<n;i++)
+    {
+    	palin[i][i]=1;
+    }
+    int max=1,ind=0;
+    for(int i=0;i<n-1;i++)
+    {
+    	if(s[i]==s[i+1])
+    	{
+    		palin[i][i+1]=1;
+    		if(max==1)
+    		{
+    			max=2;
+    			ind=i;
+    		}
+    	}
+    	else
+    		palin[i][i+1]=0;
 
-node* addOne(node* head)
-{
-	if(!head)
-		return NULL;
-	node* last=NULL,*curr=head;
-	while(curr->next)
-	{
-		if(curr->data!=9)
-			last=curr;
-		curr=curr->next;
-	}
-	if(curr->data!=9)
-	{
-		curr->data++;
-		return head;
-	}
-	if(last==NULL)
-	{
-		node* t=new node(1);
-		t->next=head;
-		curr=head;
-		while(curr)
-		{
-			curr->data=0;
-			curr=curr->next;
-		}
-		return t;
-	}
-	
-	(last->data)+=1;
-	curr=last->next;
-	while(curr)
-	{
-		curr->data=0;
-		curr=curr->next;
-	}
-	return head;
-	
+    }
+    for(int k=3;k<=n;k++)
+    {
+    	for(int i=0;i<n-k+1;i++)
+    	{
+    		int j=i+k-1;
+    		if(palin[i+1][j-1]==1&&s[i]==s[j])
+    		{
+    			palin[i][j]=1;
+    			if(k>max)
+	    		{
+	    			max=k;
+	    			ind=i;
+	    		}
+    		}
+    		else
+    			palin[i][j]=0;
+    	}
+    }
+    string res=s.substr(ind,max);
+    cout<<res<<"\n";
+    return max;
 }
 int main()
 {
@@ -99,10 +65,7 @@ int main()
 }
 void solve()
 {
-	int n;
-	cin>>n;
-	node* head=scanlist(n);
-
-	head=addOne(head);
-	printlist(head);
+	string s;
+	cin>>s;
+	cout<<"max length of palindrome substring:"<<maxPalindromeSubstr(s)<<"\n";
 }
