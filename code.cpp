@@ -6,33 +6,42 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-string countAndSay(int n) {
-    if(n==1)
-        return "1";
-    
-    string s=countAndSay(n-1);
-    int count=1,i=1;
-    int l=s.length();
-    string res="";
-    
-    while(i<l)
+int maxPalindromeSubstr(string s) {
+    int n=s.length();
+    int max=1,ind=0;
+    int low,high;
+    for(int i=1;i<n;i++)
     {
-        if(s[i]==s[i-1])
-            count++;
-        else
-        {
-            string c=to_string(count);
-            res+=c;
-            res+=s[i-1];
-            count=1;
-        }
-        i++;
+    	low=i-1,high=i;
+    	while(low>=0&&high<n&&s[low]==s[high])
+    	{
+    		low--;high++;
+    	}
+    	low++;high--;
+    	if(low<high)
+    	{
+    		if(high-low+1>max)
+    		{
+    			max=high-low+1;
+    			ind=low;
+    		}
+    	}
+    	low=i-1;high=i+1;
+    	while(low>=0&&high<n&&s[low]==s[high])
+    	{
+    		low--;high++;
+    	}
+    	low++;high--;
+    	if(high-low+1>max)
+    	{
+    		max=high-low+1;
+    		ind=low;
+    	}
     }
-    string c=to_string(count);
-    res+=c;
-    res+=s[i-1];
     
-    return res;
+    string res=s.substr(ind,max);
+    cout<<res<<"\n";
+    return max;
 }
 int main()
 {
@@ -48,7 +57,7 @@ int main()
 }
 void solve()
 {
-	int n;
-	cin>>n;
-	cout<<countAndSay(n)<<"\n";
+	string s;
+	cin>>s;
+	cout<<"max length of palindrome substring:"<<maxPalindromeSubstr(s)<<"\n";
 }
