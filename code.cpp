@@ -7,18 +7,22 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-int searchWithDiffK(vi a, int n,int k, int x)
-{
-    int i=0;
-    while(i<n)
+bool findPair(vi a, int size, int n){
+    sort(a.begin(), a.end());
+    int i=0,j=0;
+    while(i<n&&j<n)
     {
-        if(a[i]==x)
-            return i;
-        i=i+(max(1,abs(a[i]-x)/k));
+        if(a[j]-a[i]==n&&i!=j)
+            return true;
+        else if(a[j]-a[i]<n)
+            j++;
+        else
+        {
+            i++;
+        }
     }
-    return -1;
+    return false;
 }
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -38,5 +42,5 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	cout<<searchWithDiffK(a,n,20,60)<<"\n";
+	cout<<findPair(a,n,20)<<"\n";
 }
