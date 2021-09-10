@@ -7,21 +7,36 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-bool findPair(vi a, int size, int n){
+vector<vector<int> > fourSum(vector<int> &a, int sum)
+{
+    int n=a.size();
     sort(a.begin(), a.end());
-    int i=0,j=0;
-    while(i<n&&j<n)
+    
+    vector<vector<int> > res;
+    for(int i=0;i<n-3;i++)
     {
-        if(a[j]-a[i]==n&&i!=j)
-            return true;
-        else if(a[j]-a[i]<n)
-            j++;
-        else
+        for(int j=i+1;j<n-2;j++)
         {
-            i++;
+            int rem=sum-(a[i]+a[j]);
+            int k=j+1,l=n-1;
+            while(k<l)
+            {
+                if(a[k]+a[l]==rem)
+                {
+                    res.push_back({a[i],a[j],a[k],a[l]});
+                    k++,l--; 
+                }
+                else if(a[k]+a[l]<rem)
+                {
+                    k++;
+                }
+                else
+                    l--;
+            }
         }
     }
-    return false;
+    return res;
+
 }
 int main()
 {
@@ -42,5 +57,11 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	cout<<findPair(a,n,20)<<"\n";
+	vector<vector<int> > res=fourSum(a,23);
+    for(int i=0;i<res.size();i++)
+    {
+        for(int j=0;j<res[i].size();j++)
+            cout<<res[i][j]<<" ";
+        cout<<"\n";
+    }
 }
