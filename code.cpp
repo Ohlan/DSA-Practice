@@ -6,42 +6,54 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int maxPalindromeSubstr(string s) {
-    int n=s.length();
-    int max=1,ind=0;
-    int low,high;
-    for(int i=1;i<n;i++)
-    {
-    	low=i-1,high=i;
-    	while(low>=0&&high<n&&s[low]==s[high])
-    	{
-    		low--;high++;
-    	}
-    	low++;high--;
-    	if(low<high)
-    	{
-    		if(high-low+1>max)
-    		{
-    			max=high-low+1;
-    			ind=low;
-    		}
-    	}
-    	low=i-1;high=i+1;
-    	while(low>=0&&high<n&&s[low]==s[high])
-    	{
-    		low--;high++;
-    	}
-    	low++;high--;
-    	if(high-low+1>max)
-    	{
-    		max=high-low+1;
-    		ind=low;
-    	}
-    }
-    
-    string res=s.substr(ind,max);
-    cout<<res<<"\n";
-    return max;
+
+int findLast(vector<int>&a,int start,int end,int e)
+{
+	int n=end-start;
+	while(start<=end)
+	{
+		int mid=(start+end)/2;
+		if(a[mid]>e&&(a[mid]>a[mid+1]||mid==n))
+			return mid;
+		else if(a[mid]<e)
+			end=mid-1;
+		else
+			start=mid+1;
+	}
+	return -1;
+}
+int bsearch(vector<int>&a,int start,int end,int e)
+{
+	while(start<=end)
+	{
+		int mid=(start+end)/2;
+		if(a[mid]==e)
+			return mid;
+		else if(a[mid]>e)
+			end=mid-1;
+		else
+			start=mid+1;
+	}
+	return -1;
+}
+int findElement(vector<int>&a,int e)
+{
+	int n=a.size();
+	int actualLast=findLast(a,0,n-1,a[n-1]);
+	int start=0,end=n-1,res=-1;
+	if(actualLast!=-1)
+	{
+		if(e>=a[0])
+			end=actualLast;
+		else
+			start=actualLast+1;
+		res=bsearch(a,start,end,e);
+	}
+	else
+	{
+		res=bsearch(a,start,end,e);
+	}
+	return res;
 }
 int main()
 {
@@ -57,7 +69,11 @@ int main()
 }
 void solve()
 {
-	string s;
-	cin>>s;
-	cout<<"max length of palindrome substring:"<<maxPalindromeSubstr(s)<<"\n";
+	int n,e;	
+	cin>>n>>e;
+	vi a(n);
+	for(auto &x:a)
+		cin>>x;
+	int ind=findElement(a,e);
+	cout<<ind<<"\n";
 }
