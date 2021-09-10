@@ -7,31 +7,16 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-int majorityElement(vi a, int n)
+int searchWithDiffK(vi a, int n,int k, int x)
 {
-    int m=0,count=1;    
-    for(int i=1;i<n;i++)
+    int i=0;
+    while(i<n)
     {
-        if(a[i]==a[m])
-            count++;
-        else
-            count--;
-        if(count==0)
-        {
-            m=i;
-            count=1;
-        }
+        if(a[i]==x)
+            return i;
+        i=i+(max(1,abs(a[i]-x)/k));
     }
-    m=a[m],count=0;
-    for(int i=0;i<n;i++)
-    {
-        if(a[i]==m)
-            count++;
-    }
-    if(count>n/2)
-        return m;
-    else
-        return -1;
+    return -1;
 }
 
 int main()
@@ -53,5 +38,5 @@ void solve()
 	vi a(n);
 	for(auto &x:a)
 		cin>>x;
-	cout<<majorityElement(a,n)<<"\n";
+	cout<<searchWithDiffK(a,n,20,60)<<"\n";
 }
