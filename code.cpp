@@ -7,25 +7,31 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-int floorsqrt(int n)
+int majorityElement(vi a, int n)
 {
-	if(n==1||n==0)
-		return n;
-	int start=0,end=n,ans;
-	while(start<=end)
-	{
-		int mid=(start+end)/2;
-		if(mid*mid==n)
-			return mid;
-		else if(mid*mid<n)
-		{
-			ans=mid;
-			start=mid+1;
-		}
-		else
-			end=mid-1;
-	}
-	return ans;
+    int m=0,count=1;    
+    for(int i=1;i<n;i++)
+    {
+        if(a[i]==a[m])
+            count++;
+        else
+            count--;
+        if(count==0)
+        {
+            m=i;
+            count=1;
+        }
+    }
+    m=a[m],count=0;
+    for(int i=0;i<n;i++)
+    {
+        if(a[i]==m)
+            count++;
+    }
+    if(count>n/2)
+        return m;
+    else
+        return -1;
 }
 
 int main()
@@ -44,5 +50,8 @@ void solve()
 {
 	int n;	
 	cin>>n;
-	cout<<floorsqrt(n)<<"\n";
+	vi a(n);
+	for(auto &x:a)
+		cin>>x;
+	cout<<majorityElement(a,n)<<"\n";
 }
