@@ -6,17 +6,26 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int FindMaxSum(vi &a, int n)
+long long countTriplets(long long a[], int n, long long sum)
     {
-        int exc=0,inc=a[0];
-        int excn;
-        for(int i=1;i<n;i++)
+        sort(a,a+n);
+        long long count=0;
+        for(int i=0;i<n-1;i++)
         {
-            excn=max(inc,exc);
-            inc=exc+a[i];
-            exc=excn;
+            long long j=i+1,k=n-1;
+            while(j<k)
+            {
+                if(a[i]+a[j]+a[k]>=sum)
+                    k--;
+                else
+                {
+                    count+=k-j;
+                    j++;
+                }
+            }
+            
         }
-       return max(inc,exc);
+        return count;
     }
 
 int main()
@@ -35,9 +44,11 @@ void solve()
 {
 	int n;	
 	cin>>n;
-	vi a(n);
-	for(auto &x:a)
-		cin>>x;
-    cout<<FindMaxSum(a,n)<<"\n";
+	ll a[n];
+	for(int i=0;i<n;i++)
+    {
+        cin>>a[i];
+    }
+    cout<<countTriplets(a,n,15)<<"\n";
 	
 }
