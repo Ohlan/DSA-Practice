@@ -8,21 +8,17 @@ typedef pair<int,int> ii;
 void solve();
 long long maxProduct(vector<int> a, int n)
 {
-    int i=0,j=n-1;
-    long long curr1=1,curr2=1,left=0,right=0;
-    while(i<n)
+    long long maxv=a[0],minv=a[0],maxp=a[0];
+    for(int i=1;i<n;i++)
     {
-        curr1*=a[i];
-        left=max(curr1,left);
-        if(curr1==0)
-            curr1=1;
-        curr2*=a[j];
-        right=max(curr2,right);
-        if(curr2==0)
-            curr2=1;
-        i++;j--;
+    	if(a[i]<0)
+    		swap(maxv,minv);
+    	maxv=max((long long)a[i],maxv*a[i]);
+    	minv=min((long long)a[i],minv*a[i]);
+    	maxp=max(maxp,maxv);
+
     }
-    return max(left,right);
+    return maxp;
 }
 
 int main()
