@@ -6,21 +6,23 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-ll findSubarray(ll a[], int n ) {
-        map<ll,ll> mp;
-    ll sum=0,c=0;
+int* productPuzzle(int a[], int n )
+{
+    int* prod=new int[n];
+    int m=1;
     for(int i=0;i<n;i++)
     {
-        sum+=a[i];
-        if(sum==0)
-            c++;
-        if(mp.find(sum)!=mp.end())
-            c+=mp[sum];
-        
-        mp[sum]++;
+    	prod[i]=m;
+    	m*=a[i];
     }
-    return c;
+    m=1;
+    for(int i=n-1;i>=0;i--)
+    {
+    	prod[i]*=m;
+    	m*=a[i];
     }
+    return prod;
+}
 
 int main()
 {
@@ -36,12 +38,14 @@ int main()
 }
 void solve()
 {
-	ll n;	
+	int n;	
 	cin>>n;
-	ll a[n];
+	int a[n];
 	for(int i=0;i<n;i++)
     {
         cin>>a[i];
     }
-    cout<<findSubarray(a,n)<<"\n";
+    int* b=productPuzzle(a,n);
+    for(int i=0;i<n;i++)
+    	cout<<b[i]<<" ";
 }
