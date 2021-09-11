@@ -6,19 +6,23 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-long long maxProduct(vector<int> a, int n)
+int findLongestConseqSubseq(vi a, int n)
 {
-    long long maxv=a[0],minv=a[0],maxp=a[0];
-    for(int i=1;i<n;i++)
-    {
-    	if(a[i]<0)
-    		swap(maxv,minv);
-    	maxv=max((long long)a[i],maxv*a[i]);
-    	minv=min((long long)a[i],minv*a[i]);
-    	maxp=max(maxp,maxv);
-
-    }
-    return maxp;
+	unordered_map<int,int> mp;
+	for(int i=0;i<n;i++)
+		mp[a[i]]++;
+	int ans=0;
+	for(int i=0;i<n;i++)
+	{
+		if(mp.count(a[i]-1)==0)
+		{
+			int j=a[i];
+			while(mp.count(j)!=0)
+				j++;
+			ans=max(ans,j-a[i]);
+		}
+	}
+	return ans;
 }
 
 int main()
@@ -43,6 +47,6 @@ void solve()
     {
         cin>>a[i];
     }
-    cout<<maxProduct(a,n);
+    cout<<findLongestConseqSubseq(a,n);
     cout<<"\n";
 }
