@@ -6,19 +6,24 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int* productPuzzle(int a[], int n )
+int countBits(int a)
 {
-    int* prod=new int[n];
-    int m=1;
-    for(int i=0;i<n;i++)
+    int count = 0;
+    while (a)
     {
-    	m*=a[i];
+        if (a & 1 )
+            count+= 1;
+        a = a>>1;
     }
-    for(int i=0;i<n;i++)
-    {
-    	prod[i]=m*pow(a[i],-1);
-    }
-    return prod;
+    return count;
+}
+bool compare(int a,int b)
+{
+	return countBits(a)>countBits(b);
+}
+void sortBySetBitCount(int arr[], int n)
+{
+	sort(arr,arr+n,compare);
 }
 
 int main()
@@ -37,12 +42,14 @@ void solve()
 {
 	int n;	
 	cin>>n;
+
 	int a[n];
 	for(int i=0;i<n;i++)
     {
         cin>>a[i];
     }
-    int* b=productPuzzle(a,n);
+    sortBySetBitCount(a,n);
     for(int i=0;i<n;i++)
-    	cout<<b[i]<<" ";
+    	cout<<a[i]<<" ";
+    cout<<"\n";
 }
