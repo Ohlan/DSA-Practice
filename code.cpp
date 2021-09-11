@@ -6,24 +6,23 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int countBits(int a)
+long long maxProduct(vector<int> a, int n)
 {
-    int count = 0;
-    while (a)
+    int i=0,j=n-1;
+    long long curr1=1,curr2=1,left=0,right=0;
+    while(i<n)
     {
-        if (a & 1 )
-            count+= 1;
-        a = a>>1;
+        curr1*=a[i];
+        left=max(curr1,left);
+        if(curr1==0)
+            curr1=1;
+        curr2*=a[j];
+        right=max(curr2,right);
+        if(curr2==0)
+            curr2=1;
+        i++;j--;
     }
-    return count;
-}
-bool compare(int a,int b)
-{
-	return countBits(a)>countBits(b);
-}
-void sortBySetBitCount(int arr[], int n)
-{
-	sort(arr,arr+n,compare);
+    return max(left,right);
 }
 
 int main()
@@ -43,13 +42,11 @@ void solve()
 	int n;	
 	cin>>n;
 
-	int a[n];
+	vi a(n);
 	for(int i=0;i<n;i++)
     {
         cin>>a[i];
     }
-    sortBySetBitCount(a,n);
-    for(int i=0;i<n;i++)
-    	cout<<a[i]<<" ";
+    cout<<maxProduct(a,n);
     cout<<"\n";
 }
