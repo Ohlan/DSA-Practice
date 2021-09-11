@@ -6,36 +6,65 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-
+typedef struct half
+{
+    int val;
+    int first;
+    int second;
+}half;
+bool compare(half &p1,half &p2)
+{
+    return (p1.val<=p2.val);
+}
+bool noCommon(half a, half b)
+{
+    if (a.first == b.first || a.first == b.second
+        || a.second == b.first || a.second == b.second)
+        return false;
+    return true;
+}
 vector<vector<int> > fourSum(vector<int> &a, int sum)
 {
     int n=a.size();
-    sort(a.begin(), a.end());
-    
-    vector<vector<int> > res;
-    for(int i=0;i<n-3;i++)
+    int l=(n*(n-1))/2,k=0;
+    half pairs[l];
+    for(int i=0;i<n-1;i++)
     {
-        for(int j=i+1;j<n-2;j++)
+        for(int j=i+1;j<n;j++)
         {
-            int rem=sum-(a[i]+a[j]);
-            int k=j+1,l=n-1;
-            while(k<l)
-            {
-                if(a[k]+a[l]==rem)
-                {
-                    res.push_back({a[i],a[j],a[k],a[l]});
-                    k++,l--; 
-                }
-                else if(a[k]+a[l]<rem)
-                {
-                    k++;
-                }
-                else
-                    l--;
-            }
+            pairs[k].val=a[i]+a[j];
+            pairs[k].first=i;
+            pairs[k].second=j;
+            k++;
         }
     }
-    return res;
+
+    sort(pairs,pairs+l,compare);
+    vector<vector<int> > res;
+    int i=0,j=l-1;
+    while(i<j)
+    {
+        if(pairs[i].val+pairs[j].val==sum)
+        {
+            
+            int x=pairs[i].first;
+            int y=pairs[i].second;
+            int c=pairs[j].first;
+            int d=pairs[j].second;
+            if(noCommon(pairs[i], pairs[j]))
+                res.push_back({a[x],a[y],a[c],a[d]});
+            // i++;
+            j--;
+        }
+        else if(pairs[i].val+pairs[j].val<sum)
+        {
+            i++;
+        }
+        else
+            j--;
+
+    }
+    return res; 
 
 }
 int main()
