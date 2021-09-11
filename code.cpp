@@ -6,24 +6,15 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int findLongestConseqSubseq(vi a, int n)
-{
-	unordered_map<int,int> mp;
-	for(int i=0;i<n;i++)
-		mp[a[i]]++;
-	int ans=0;
-	for(int i=0;i<n;i++)
-	{
-		if(mp.count(a[i]-1)==0)
-		{
-			int j=a[i];
-			while(mp.count(j)!=0)
-				j++;
-			ans=max(ans,j-a[i]);
-		}
-	}
-	return ans;
-}
+long long findMinDiff(vector<long long> a, long long n, long long m){
+    sort(a.begin(),a.end());
+    long long mi=a[n-1];
+    for(int i=0;i<=n-m;i++)
+    {
+        mi=min(mi,a[i+m-1]-a[i]);
+    }
+    return mi;
+    }
 
 int main()
 {
@@ -42,11 +33,11 @@ void solve()
 	int n;	
 	cin>>n;
 
-	vi a(n);
+	vector<ll> a(n);
 	for(int i=0;i<n;i++)
     {
         cin>>a[i];
     }
-    cout<<findLongestConseqSubseq(a,n);
+    cout<<findMinDiff(a,n,5);
     cout<<"\n";
 }
