@@ -12,14 +12,11 @@ int* productPuzzle(int a[], int n )
     int m=1;
     for(int i=0;i<n;i++)
     {
-    	prod[i]=m;
     	m*=a[i];
     }
-    m=1;
-    for(int i=n-1;i>=0;i--)
+    for(int i=0;i<n;i++)
     {
-    	prod[i]*=m;
-    	m*=a[i];
+    	prod[i]=m*pow(a[i],-1);
     }
     return prod;
 }
