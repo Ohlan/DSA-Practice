@@ -12,28 +12,28 @@ void swap(vi &a,int i,int j)
 	a[i]=a[j];
 	a[j]=temp;
 }
-void threeWayPartition(vector<int>& arr,int a, int b)
+int minSwap(vector<int> arr,int k)
 {
 	int n=arr.size();
-	int i=0;
-	for(int j=0;j<n;j++)
+	int count=0;
+	for(int i=0;i<n;i++)
+		if(arr[i]<=k)
+			count++;
+	int bad=0;
+	for(int i=0;i<count;i++)
+		if(arr[i]>k)
+			bad++;
+	int ans=bad;
+	for(int i=0,j=count;j<n;j++,i++)
 	{
-		if(arr[j]<a)
-		{
-			swap(arr,i,j);
-			i++;
-		}
+		if(arr[i]>k)
+			bad--;
+		if(arr[j]>k)
+			bad++;
+
+		ans=min(ans,bad);
 	}
-	int k=i;
-	i=n-1;
-	for(int j=n-1;j>=k;j--)
-	{
-		if(arr[j]>b)
-		{
-			swap(arr,i,j);
-			i--;
-		}
-	}
+	return ans;
 }
 
 int main()
@@ -58,10 +58,6 @@ void solve()
     {
         cin>>a[i];
     }
-    threeWayPartition(a,44,62);
-    for(int i=0;i<n;i++)
-    {
-        cout<<a[i]<<" ";
-    }
+    cout<<minSwap(a,1)<<" ";
     cout<<"\n";
 }
