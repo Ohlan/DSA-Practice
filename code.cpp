@@ -6,55 +6,37 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-int merge(int arr[], int start,int mid,int end)
+void swap(vector<int>&a,int i,int j)
 {
-	int l=end-start+1;
-	int a[l];
-	int i=start,j=mid+1,k=0;
-	int c=0;
-	while(i<=mid&&j<=end)
-	{
-		if(arr[i]<=arr[j])
-		{
-			a[k]=arr[i];
-			i++;k++;
-
-		}
-		else
-		{
-			a[k]=arr[j];
-			j++,k++;
-			c+=mid-i+1;
-		}
-	}
-	while(i<=mid)
-	{
-		a[k]=arr[i];
-		i++;k++;
-	}
-	while(j<=end)
-	{
-		a[k]=arr[j];
-		j++,k++;
-	}
-	k=0;
-	for(int p=start;p<=end;p++,k++)
-		arr[p]=a[k];
-	return c;
+	int temp=a[i];
+	a[i]=a[j];
+	a[j]=temp;
 }
-
-
-int inversionCount(int arr[], int start,int end)
+int minSwaps(vector<int>&a)
 {
-	if(start<end)
+	vector<int>temp(a.begin(),a.end());
+	sort(temp.begin(), temp.end());
+	map<int,int>mp;int k=0;
+	for(auto i:a)
 	{
-		int mid=(start+end)/2;
-		int c1=inversionCount(arr,start,mid);
-		int c2=inversionCount(arr,mid+1,end);
-		int c3=merge(arr,start,mid,end);
-		return c1+c2+c3;
+		mp[i]=k;
+		k++;
 	}
-	return 0;		
+	int count=0;
+
+	for(int i=0;i<k;i++)
+	{
+		if(a[i]!=temp[i])
+		{
+			int init=a[i];
+			swap(a,i,mp[temp[i]]);
+			mp[init]=mp[temp[i]];
+			mp[temp[i]]=i;
+			count++;
+		}
+		
+	}
+	return count;
 }
 
 int main()
@@ -74,15 +56,11 @@ void solve()
 	int n;	
 	cin>>n;
 
-	int a[n];
+	vi a(n);
 	for(int i=0;i<n;i++)
     {
         cin>>a[i];
     }
-    cout<<inversionCount(a,0,n-1)<<"\n";
-    for(int i=0;i<n;i++)
-    {
-        cout<<a[i]<<" ";
-    }
-    cout<<"\n";
+    cout<<minSwaps(a)<<"\n";
+    
 }
