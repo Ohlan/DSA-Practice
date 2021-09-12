@@ -6,37 +6,24 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-void swap(vector<int>&a,int i,int j)
-{
-	int temp=a[i];
-	a[i]=a[j];
-	a[j]=temp;
-}
-int minSwaps(vector<int>&a)
-{
-	vector<int>temp(a.begin(),a.end());
-	sort(temp.begin(), temp.end());
-	map<int,int>mp;int k=0;
-	for(auto i:a)
-	{
-		mp[i]=k;
-		k++;
-	}
-	int count=0;
 
-	for(int i=0;i<k;i++)
+int smallestSubWithSum(vi a, int n, int x)
+{
+	int i=0,j=0,sum=0,min=n;
+	while(j<n)
 	{
-		if(a[i]!=temp[i])
+		while(sum<=x&&j<n)
 		{
-			int init=a[i];
-			swap(a,i,mp[temp[i]]);
-			mp[init]=mp[temp[i]];
-			mp[temp[i]]=i;
-			count++;
+			sum+=a[j++];
 		}
-		
+		while(sum>x)
+		{
+			if(j-i<min)
+				min=j-i;
+			sum-=a[i++];
+		}
 	}
-	return count;
+	return min;
 }
 
 int main()
@@ -61,6 +48,6 @@ void solve()
     {
         cin>>a[i];
     }
-    cout<<minSwaps(a)<<"\n";
+    cout<<smallestSubWithSum(a,n,7)<<"\n";
     
 }
