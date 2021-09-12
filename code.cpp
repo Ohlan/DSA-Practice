@@ -7,22 +7,39 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
+int increaseByMin(vi &a,int n)
+{
+	int min=mod;
+	for(auto i:a)
+		if(i<min)
+			min=i;
+	min=abs(min);
+	for(int i=0;i<n;i++)
+		a[i]+=min;
+	return min;
+}
+
 int smallestSubWithSum(vi a, int n, int x)
 {
-	int i=0,j=0,sum=0,min=n;
+	int val=increaseByMin(a,n);
+	int i=0,j=0,sum=0,min=n+1;
 	while(j<n)
 	{
 		while(sum<=x&&j<n)
 		{
 			sum+=a[j++];
+			sum-=val;
 		}
 		while(sum>x)
 		{
 			if(j-i<min)
 				min=j-i;
 			sum-=a[i++];
+			sum+=val;
 		}
 	}
+	if(min==n+1)
+		return -1;
 	return min;
 }
 
