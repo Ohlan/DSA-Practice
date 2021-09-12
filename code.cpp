@@ -6,34 +6,35 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-void swap(vi &a,int i,int j)
+int search(vi a,int n,int x)
 {
-	int temp=a[i];
-	a[i]=a[j];
-	a[j]=temp;
-}
-int minSwap(vector<int> arr,int k)
-{
-	int n=arr.size();
-	int count=0;
-	for(int i=0;i<n;i++)
-		if(arr[i]<=k)
-			count++;
-	int bad=0;
-	for(int i=0;i<count;i++)
-		if(arr[i]>k)
-			bad++;
-	int ans=bad;
-	for(int i=0,j=count;j<n;j++,i++)
+	int i=0,j=n;
+	while(i<=j)
 	{
-		if(arr[i]>k)
-			bad--;
-		if(arr[j]>k)
-			bad++;
-
-		ans=min(ans,bad);
+		int mid=(i+j)/2;
+		if((a[mid]>=a[mid-1]||mid==0)&&(a[mid]>=a[mid+1]||mid==n))
+			return mid;
+		else if(a[mid]<x)
+		{
+			j=mid-1;
+		}
+		else
+		{
+			i=mid+1;
+		}
 	}
-	return ans;
+	return -1;
+}
+
+int findPivot(vi a,int n)
+{
+	if(a[0]<a[n-1])
+	{
+		cout<<"array is not rotated...\n";
+		return n-1;
+	}
+	int ind=search(a,n-1,a[n-1]);
+	return ind;
 }
 
 int main()
@@ -58,6 +59,6 @@ void solve()
     {
         cin>>a[i];
     }
-    cout<<minSwap(a,1)<<" ";
-    cout<<"\n";
+    cout<<findPivot(a,n)<<"\n";
+
 }
