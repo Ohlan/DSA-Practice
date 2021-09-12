@@ -6,41 +6,34 @@ using namespace std;
 #define ull unsigned long long
 typedef pair<int,int> ii;
 void solve();
-
-int increaseByMin(vi &a,int n)
+void swap(vi &a,int i,int j)
 {
-	int min=mod;
-	for(auto i:a)
-		if(i<min)
-			min=i;
-	min=abs(min);
-	for(int i=0;i<n;i++)
-		a[i]+=min;
-	return min;
+	int temp=a[i];
+	a[i]=a[j];
+	a[j]=temp;
 }
-
-int smallestSubWithSum(vi a, int n, int x)
+void threeWayPartition(vector<int>& arr,int a, int b)
 {
-	int val=increaseByMin(a,n);
-	int i=0,j=0,sum=0,min=n+1;
-	while(j<n)
+	int n=arr.size();
+	int i=0;
+	for(int j=0;j<n;j++)
 	{
-		while(sum<=x&&j<n)
+		if(arr[j]<a)
 		{
-			sum+=a[j++];
-			sum-=val;
-		}
-		while(sum>x)
-		{
-			if(j-i<min)
-				min=j-i;
-			sum-=a[i++];
-			sum+=val;
+			swap(arr,i,j);
+			i++;
 		}
 	}
-	if(min==n+1)
-		return -1;
-	return min;
+	int k=i;
+	i=n-1;
+	for(int j=n-1;j>=k;j--)
+	{
+		if(arr[j]>b)
+		{
+			swap(arr,i,j);
+			i--;
+		}
+	}
 }
 
 int main()
@@ -65,6 +58,10 @@ void solve()
     {
         cin>>a[i];
     }
-    cout<<smallestSubWithSum(a,n,7)<<"\n";
-    
+    threeWayPartition(a,44,62);
+    for(int i=0;i<n;i++)
+    {
+        cout<<a[i]<<" ";
+    }
+    cout<<"\n";
 }
