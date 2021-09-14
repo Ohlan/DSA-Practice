@@ -9,23 +9,25 @@ typedef struct node
 {
 	int data;
 	node* next;
+	node* prev;
 	node(int data=0)
 	{
 		this->data=data;
 		next=NULL;
+		prev=NULL;
 	}
 }node;
 void solve();
-void printcircularlist(node* head,int n)
+void printlist(node* head)
 {
-	while(n--)
+	while(head)
 	{
 		cout<<head->data<<" ";
 		head=head->next;
 	}
 	cout<<"\n";
 }
-node* scancircularlist(int n)
+node* scanlist(int n)
 {
 	if(n<=0)
 		return NULL;
@@ -37,54 +39,40 @@ node* scancircularlist(int n)
 	{
 		node* temp=new node();
 		cin>>temp->data;
-		temp->next=NULL;
+		temp->prev=prev;
 		prev->next=temp;
 		prev=prev->next;
 	}
-	prev->next=head;
+	prev->next=NULL;
 	return head;
 }
 
-void splitList(node *head, node **head1_ref, node **head2_ref)
+void sortKsorted(node **head,int k)
 {
-    if(head==NULL)
-    {
-    	(*head1_ref)=NULL;
-    	(*head2_ref)=NULL;
-    }
-    if(head->next==NULL)
-    {
-    	(*head1_ref)=head;
-    	(*head2_ref)=NULL;
-    }
-    (*head1_ref)=head;
-    node *temp=head;
-    int n=0;
-    while(temp)
-    {
-    	if(temp==head&&n!=0)
-    		break;
-    	temp=temp->next;
-    	n++;
-    }
-    int k=(n%2)?(n/2+1):(n/2),i=1;
-    while(i<=n)
-    {
-    	if(i==k)
-    	{
-    		(*head2_ref)=temp->next;
-    		temp->next=head;
-    		temp=(*head2_ref);
-    		i++;
-    		continue;
-    	}
-    	if(i==n)
-    	{
-    		temp->next=(*head2_ref);
-    	}
-    	temp=temp->next;
-    	i++;
-    }
+ 	if((*head)==NULL||((*head)->next)==NULL)
+ 		return;
+ 	for(node* i=((*head)->next);i!=NULL;i=i->next)
+ 	{
+ 		node* j=i;
+ 		while(j->prev != NULL && j->data < j->prev->data) {
+              // swap j and j.prev node
+            node* temp = j->prev->prev;
+            node* temp2 = j->prev;
+            node* temp3 = j->next;
+            j->prev->next = temp3;
+            j->prev->prev = j;
+            j->prev = temp;
+            j->next = temp2;
+            if(temp != NULL)
+                temp->next = j;
+            if(temp3 != NULL)
+                temp3->prev = temp2;
+        }
+          // if j is now the new head
+       // then reset head
+        if(j->prev == NULL)
+            (*head) = j;
+ 	}
 }
 int main()
 {
@@ -103,12 +91,8 @@ void solve()
 	int n;
 	cin>>n;
 
-	node* h1=scancircularlist(n);
-
-	node* h2,*h3;
-	printcircularlist(h1,n);
-	splitList(h1,&h2,&h3);
-	printcircularlist(h2,ceil(((float)n)/2));
-	printcircularlist(h3,n/2);
-	
+	node* h=scanlist(n);
+	printlist(h);
+	sortKsorted(&h,2);
+	printlist(h);	
 }
