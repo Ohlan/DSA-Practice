@@ -5,38 +5,87 @@ using namespace std;
 #define vi vector<int>
 #define ull unsigned long long
 typedef pair<int,int> ii;
+typedef struct node
+{
+	int data;
+	node* next;
+	node(int data=0)
+	{
+		this->data=data;
+		next=NULL;
+	}
+}node;
 void solve();
-int search(vi a,int n,int x)
+void printcircularlist(node* head,int n)
 {
-	int i=0,j=n;
-	while(i<=j)
+	while(n--)
 	{
-		int mid=(i+j)/2;
-		if((a[mid]>=a[mid-1]||mid==0)&&(a[mid]>=a[mid+1]||mid==n))
-			return mid;
-		else if(a[mid]<x)
-		{
-			j=mid-1;
-		}
-		else
-		{
-			i=mid+1;
-		}
+		cout<<head->data<<" ";
+		head=head->next;
 	}
-	return -1;
+	cout<<"\n";
+}
+node* scancircularlist(int n)
+{
+	if(n<=0)
+		return NULL;
+	node* head=new node();
+	cin>>head->data;
+	node* prev=head;
+	n--;
+	while(n--)
+	{
+		node* temp=new node();
+		cin>>temp->data;
+		temp->next=NULL;
+		prev->next=temp;
+		prev=prev->next;
+	}
+	prev->next=head;
+	return head;
 }
 
-int findPivot(vi a,int n)
+void splitList(node *head, node **head1_ref, node **head2_ref)
 {
-	if(a[0]<a[n-1])
-	{
-		cout<<"array is not rotated...\n";
-		return n-1;
-	}
-	int ind=search(a,n-1,a[n-1]);
-	return ind;
+    if(head==NULL)
+    {
+    	(*head1_ref)=NULL;
+    	(*head2_ref)=NULL;
+    }
+    if(head->next==NULL)
+    {
+    	(*head1_ref)=head;
+    	(*head2_ref)=NULL;
+    }
+    (*head1_ref)=head;
+    node *temp=head;
+    int n=0;
+    while(temp)
+    {
+    	if(temp==head&&n!=0)
+    		break;
+    	temp=temp->next;
+    	n++;
+    }
+    int k=(n%2)?(n/2+1):(n/2),i=1;
+    while(i<=n)
+    {
+    	if(i==k)
+    	{
+    		(*head2_ref)=temp->next;
+    		temp->next=head;
+    		temp=(*head2_ref);
+    		i++;
+    		continue;
+    	}
+    	if(i==n)
+    	{
+    		temp->next=(*head2_ref);
+    	}
+    	temp=temp->next;
+    	i++;
+    }
 }
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -51,14 +100,15 @@ int main()
 }
 void solve()
 {
-	int n;	
+	int n;
 	cin>>n;
 
-	vi a(n);
-	for(int i=0;i<n;i++)
-    {
-        cin>>a[i];
-    }
-    cout<<findPivot(a,n)<<"\n";
+	node* h1=scancircularlist(n);
 
+	node* h2,*h3;
+	printcircularlist(h1,n);
+	splitList(h1,&h2,&h3);
+	printcircularlist(h2,ceil(((float)n)/2));
+	printcircularlist(h3,n/2);
+	
 }
