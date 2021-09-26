@@ -4,95 +4,97 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
+#define pq priority_queue<int>
+#define dq deque<int>
 typedef pair<int,int> ii;
-typedef struct node
-{
-	int data;
-	node* next;
-	node* prev;
-	node(int data=0)
-	{
-		this->data=data;
-		next=NULL;
-		prev=NULL;
-	}
-}node;
 void solve();
-void printlist(node* head)
+vi getMaxWeights(int n,int k,vi weights)
 {
-	while(head)
+	vi res;
+	dq q;
+	for(int i=1;i<=k&&i<n;i++)
 	{
-		cout<<head->data<<" ";
-		head=head->next;
+		while((!q.empty())&&(weights[q.back()]<=weights[i]))
+			q.pop_back();
+		q.push_back(i);
 	}
-	cout<<"\n";
-}
-node* scanlist(int n)
-{
-	if(n<=0)
-		return NULL;
-	node* head=new node();
-	cin>>head->data;
-	node* prev=head;
-	n--;
-	while(n--)
-	{
-		node* temp=new node();
-		cin>>temp->data;
-		temp->prev=prev;
-		prev->next=temp;
-		prev=prev->next;
-	}
-	prev->next=NULL;
-	return head;
-}
+	if(!q.empty())
+		res.push_back(q.front());
 
-void sortKsorted(node **head,int k)
+	int i=1,j=k+1;
+	while(i<n-1)
+	{
+		while ((!q.empty()) && q.front() <= i)
+            q.pop_front();
+
+        int ind=min(j,n-1);
+        while ((!q.empty()) && weights[ind] >= weights[q.back()])
+            q.pop_back();
+ 
+        q.push_back(ind);
+        res.push_back(q.front());
+        i++;
+        j++;
+	}
+	res.push_back(-1);
+	return res;
+}
+ll getMaxTaste(int n,int k,vi weights,vi taste)
 {
- 	if((*head)==NULL||((*head)->next)==NULL)
- 		return;
- 	for(node* i=((*head)->next);i!=NULL;i=i->next)
- 	{
- 		node* j=i;
- 		while(j->prev != NULL && j->data < j->prev->data) {
-              // swap j and j.prev node
-            node* temp = j->prev->prev;
-            node* temp2 = j->prev;
-            node* temp3 = j->next;
-            j->prev->next = temp3;
-            j->prev->prev = j;
-            j->prev = temp;
-            j->next = temp2;
-            if(temp != NULL)
-                temp->next = j;
-            if(temp3 != NULL)
-                temp3->prev = temp2;
-        }
-          // if j is now the new head
-       // then reset head
-        if(j->prev == NULL)
-            (*head) = j;
- 	}
+	ll ans=taste[n-1];
+	if(n==1)
+		return ans;
+	vi w=getMaxWeights(n,k,weights);
+	int i=n-2;
+	unordered_map<int,ll>mp;
+	while(i>=0)
+	{
+		ll curr=0;
+		int j=i;
+		while(j!=-1)
+		{
+			if(mp.count(j)!=0)
+			{
+				curr+=mp[j];
+				break;
+			}
+			curr+=taste[j];
+			j=w[j];
+		}
+		mp[i]=curr;
+		if(curr>ans)
+			ans=curr;
+		i--;
+	}
+	return ans;
 }
 int main()
 {
 	ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    	cin.tie(NULL);
     
 	int t;
 	cin>>t;
 	while(t--)
-		solve();
-	
+		solve();	
 	return 0;
 }
 void solve()
 {
-	int n;
-	cin>>n;
-
-	node* h=scanlist(n);
-	printlist(h);
-	sortKsorted(&h,2);
-	printlist(h);	
+	int n,k;
+	cin>>n>>k;
+	vi weights(n);
+	vi taste(n);
+	for(auto &x:weights)
+	{
+		cin>>x;
+	}
+	for(auto &x:taste)
+	{
+		cin>>x;
+	}
+	
+	
+	ll maxTaste=getMaxTaste(n,k,weights,taste);
+	cout<<maxTaste<<"\n";
 }
