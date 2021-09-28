@@ -8,6 +8,67 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
+void addEdge(vector<int> adjacent[],int a,int b)
+{
+	adjacent[a].push_back(b);
+	adjacent[b].push_back(a);
+}
+void scanList(vector<int> adjacent[],int v,int e)
+{
+	while(e--)
+	{
+		int a,b;
+		cin>>a>>b;
+		addEdge(adjacent,a,b);
+	}
+}
+void printList(vector<int> adjacent[],int v)
+{
+	for(int i=0;i<v;i++)
+	{
+		cout<<i<<":  ";
+		for(int j=0;j<adjacent[i].size();j++)
+			cout<<adjacent[i][j]<<" ";
+		cout<<"\n";
+	}
+}
+void ComponentBFS(vector<int> adjacent[],int v,bool visited[])
+{
+	queue<int> visit;
+	visit.push(v);
+	visited[v]=true;
+	while(!visit.empty())
+	{
+		cout<<visit.front()<<" ";
+		visit.pop();
+		for(int i=0;i<adjacent[v].size();i++)
+		{
+			if(visited[adjacent[v][i]]==false)
+			{
+				visit.push(adjacent[v][i]);
+				visited[adjacent[v][i]]=true;
+			}
+		}
+	}
+}
+int BFS(vector<int> adjacent[],int v)
+{
+	bool visited[v];
+	for(int i=0;i<v;i++)
+		visited[i]=false;
+	int connectedComponents=0;
+	for(int i=0;i<v;i++)
+	{
+		if(visited[i]==false)
+		{
+			connectedComponents++;
+			ComponentBFS(adjacent,i,visited);
+			cout<<"\n";
+		}
+	}
+	return connectedComponents;
+}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -20,30 +81,11 @@ int main()
 }
 void solve()
 {
-	int n;
-	cin>>n;
-	vi a(n);
-	for(auto &x:a)
-		cin>>x;
-	int ans1=0,ans2=a[0];
-  	
-  	for(int i=0;i<n;i++)
-	{
-		ans2|=a[i];
-	}
-
-  	for(int i=0;i<32;i++)
-	{
-	    int cnt=0;
-	    for(int j=0;j<n;j++)
-	    {
-	       if(a[j]%2==0) cnt++;
-	       a[j]/=2;
-	    }
-	    if(cnt!=n)
-	    {
-	      ans1 += (1<<i);
-	    }
-	}
-	cout<<ans1<<" "<<ans2<<"\n";
+	int v,e;
+	cin>>v>>e;
+	vector<int> adjacent[v];
+	scanList(adjacent,v,e);
+	printList(adjacent,v);
+	int c=BFS(adjacent,v);
+	cout<<c<<"\n";
 }
