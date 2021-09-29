@@ -32,32 +32,36 @@ void printList(vector<int> adjacent[],int v)
 		cout<<"\n";
 	}
 }
-void DFSRec(vector<int> adjacent[],int v,bool visited[])
+bool DFSRec(vector<int> adjacent[],int v,bool visited[],int parent)
 {
-	cout<<v<<" ";
+	
 	visited[v]=true;
 	for(int i=0;i<adjacent[v].size();i++)
 	{
 		if(visited[adjacent[v][i]]==false)
-			DFSRec(adjacent,adjacent[v][i],visited);
+			return DFSRec(adjacent,adjacent[v][i],visited,v);
+		else
+		{
+			if(adjacent[v][i]!=parent)
+				return true;
+		}
 	}
+	return false;
 }
 
-int DFS(vector<int> adjacent[],int v)
+bool detectCycleUG(vector<int> adjacent[],int v)
 {
 	bool visited[v];
 	for(int i=0;i<v;i++)
 		visited[i]=false;
-	int connectedComponents=0;
 	for(int i=0;i<v;i++)
 	{
 		if(visited[i]==false)
 		{
-			connectedComponents++;
-			DFSRec(adjacent,i,visited);
+			return DFSRec(adjacent,i,visited,-1);
 		}
 	}
-	return connectedComponents;
+	return false;
 }
 int main()
 {
@@ -76,6 +80,7 @@ void solve()
 	vector<int> adjacent[v];
 	scanList(adjacent,v,e);
 	printList(adjacent,v);
-	int c=DFS(adjacent,v);
-	cout<<c<<"\n";
+	string s=detectCycleUG(adjacent,v)?"cycle present\n":"cycle not present\n";
+	cout<<s;
+	
 }
