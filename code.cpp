@@ -32,26 +32,18 @@ void printList(vector<int> adjacent[],int v)
 		cout<<"\n";
 	}
 }
-void ComponentBFS(vector<int> adjacent[],int v,bool visited[])
+void DFSRec(vector<int> adjacent[],int v,bool visited[])
 {
-	queue<int> visit;
-	visit.push(v);
+	cout<<v<<" ";
 	visited[v]=true;
-	while(!visit.empty())
+	for(int i=0;i<adjacent[v].size();i++)
 	{
-		cout<<visit.front()<<" ";
-		visit.pop();
-		for(int i=0;i<adjacent[v].size();i++)
-		{
-			if(visited[adjacent[v][i]]==false)
-			{
-				visit.push(adjacent[v][i]);
-				visited[adjacent[v][i]]=true;
-			}
-		}
+		if(visited[adjacent[v][i]]==false)
+			DFSRec(adjacent,adjacent[v][i],visited);
 	}
 }
-int BFS(vector<int> adjacent[],int v)
+
+int DFS(vector<int> adjacent[],int v)
 {
 	bool visited[v];
 	for(int i=0;i<v;i++)
@@ -62,13 +54,11 @@ int BFS(vector<int> adjacent[],int v)
 		if(visited[i]==false)
 		{
 			connectedComponents++;
-			ComponentBFS(adjacent,i,visited);
-			cout<<"\n";
+			DFSRec(adjacent,i,visited);
 		}
 	}
 	return connectedComponents;
 }
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -86,6 +76,6 @@ void solve()
 	vector<int> adjacent[v];
 	scanList(adjacent,v,e);
 	printList(adjacent,v);
-	int c=BFS(adjacent,v);
+	int c=DFS(adjacent,v);
 	cout<<c<<"\n";
 }
