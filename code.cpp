@@ -11,7 +11,6 @@ void solve();
 void addEdge(vector<int> adjacent[],int a,int b)
 {
 	adjacent[a].push_back(b);
-	adjacent[b].push_back(a);
 }
 void scanList(vector<int> adjacent[],int v,int e)
 {
@@ -32,33 +31,40 @@ void printList(vector<int> adjacent[],int v)
 		cout<<"\n";
 	}
 }
-bool DFSRec(vector<int> adjacent[],int v,bool visited[],int parent)
+bool DFSRec(vector<int> adjacent[],int v,bool visited[],bool RecTree[])
 {
 	
 	visited[v]=true;
+	RecTree[v]=true;
 	for(int i=0;i<adjacent[v].size();i++)
 	{
-		if(visited[adjacent[v][i]]==false)
-			return DFSRec(adjacent,adjacent[v][i],visited,v);
+		if(visited[adjacent[v][i]]==false&&DFSRec(adjacent,adjacent[v][i],visited,RecTree))
+			return true;
 		else
 		{
-			if(adjacent[v][i]!=parent)
+			if(RecTree[adjacent[v][i]])
 				return true;
 		}
 	}
+	RecTree[v]=false;
 	return false;
 }
 
-bool detectCycleUG(vector<int> adjacent[],int v)
+bool detectCycleDG(vector<int> adjacent[],int v)
 {
 	bool visited[v];
+	bool RecTree[v];
 	for(int i=0;i<v;i++)
+	{
 		visited[i]=false;
+		RecTree[i]=false;
+	}
 	for(int i=0;i<v;i++)
 	{
 		if(visited[i]==false)
 		{
-			return DFSRec(adjacent,i,visited,-1);
+			if(DFSRec(adjacent,i,visited,RecTree))
+				return true;
 		}
 	}
 	return false;
@@ -66,7 +72,7 @@ bool detectCycleUG(vector<int> adjacent[],int v)
 int main()
 {
 	ios_base::sync_with_stdio(false);
-    	cin.tie(NULL);
+    cin.tie(NULL);
 	int t;
 	cin>>t;
 	while(t--)
@@ -80,7 +86,6 @@ void solve()
 	vector<int> adjacent[v];
 	scanList(adjacent,v,e);
 	printList(adjacent,v);
-	string s=detectCycleUG(adjacent,v)?"cycle present\n":"cycle not present\n";
-	cout<<s;
-	
+	string s=detectCycleDG(adjacent,v)?"cycle present\n":"cycle not present\n";
+	cout<<s;	
 }
