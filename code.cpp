@@ -32,7 +32,7 @@ void printList(vector<int> adjacent[],int v)
 	}
 }
 
-void topologicalSort(vector<int> adjacent[],int v)
+bool cyclePresent(vector<int> adjacent[],int v)
 {
 	int inDegree[v]={0};
 	for(int i=0;i<v;i++)
@@ -44,17 +44,19 @@ void topologicalSort(vector<int> adjacent[],int v)
 	for(int i=0;i<v;i++)
 		if(inDegree[i]==0)
 			q.push(i);
+	int count=0;
 	while(!q.empty())
 	{
 		int e=q.front();
-		cout<<e<<" ";
 		for(int x:adjacent[e])
 		{
 			if(--inDegree[x]==0)
 				q.push(x);
 		}
 		q.pop();
+		count++;
 	}
+	return (count!=v);
 }
 int main()
 {
@@ -73,5 +75,5 @@ void solve()
 	vector<int> adjacent[v];
 	scanList(adjacent,v,e);
 	printList(adjacent,v);
-	topologicalSort(adjacent,v);
+	cout<<cyclePresent(adjacent,v)<<"\n";
 }
