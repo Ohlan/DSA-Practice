@@ -32,31 +32,33 @@ void printList(vector<int> adjacent[],int v)
 	}
 }
 
-bool cyclePresent(vector<int> adjacent[],int v)
+void DFSRec(vector<int>adjacent[],int u,bool visited[],stack<int> &ans)
 {
-	int inDegree[v]={0};
-	for(int i=0;i<v;i++)
+	visited[u]=true;
+	for(auto x:adjacent[u])
 	{
-		for(int j=0;j<adjacent[i].size();j++)
-			inDegree[adjacent[i][j]]++;
-	}
-	queue<int> q;
-	for(int i=0;i<v;i++)
-		if(inDegree[i]==0)
-			q.push(i);
-	int count=0;
-	while(!q.empty())
-	{
-		int e=q.front();
-		for(int x:adjacent[e])
+		if(visited[x]==false)
 		{
-			if(--inDegree[x]==0)
-				q.push(x);
+			DFSRec(adjacent,x,visited,ans);
 		}
-		q.pop();
-		count++;
 	}
-	return (count!=v);
+	ans.push(u);
+}
+
+void topologicalSortDFS(vector<int> adjacent[],int v)
+{
+	stack<int> ans;
+	bool visited[v]={0};
+	for(int i=0;i<v;i++)
+	{
+		if(visited[i]==0)
+			DFSRec(adjacent,i,visited,ans);
+	}
+	while(!ans.empty())
+	{
+		cout<<ans.top()<<" ";
+		ans.pop();
+	}
 }
 int main()
 {
@@ -75,5 +77,5 @@ void solve()
 	vector<int> adjacent[v];
 	scanList(adjacent,v,e);
 	printList(adjacent,v);
-	cout<<cyclePresent(adjacent,v)<<"\n";
+	topologicalSortDFS(adjacent,v);
 }
