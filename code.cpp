@@ -31,43 +31,30 @@ void printList(vector<int> adjacent[],int v)
 		cout<<"\n";
 	}
 }
-bool DFSRec(vector<int> adjacent[],int v,bool visited[],bool RecTree[])
-{
-	
-	visited[v]=true;
-	RecTree[v]=true;
-	for(int i=0;i<adjacent[v].size();i++)
-	{
-		if(visited[adjacent[v][i]]==false&&DFSRec(adjacent,adjacent[v][i],visited,RecTree))
-			return true;
-		else
-		{
-			if(RecTree[adjacent[v][i]])
-				return true;
-		}
-	}
-	RecTree[v]=false;
-	return false;
-}
 
-bool detectCycleDG(vector<int> adjacent[],int v)
+void topologicalSort(vector<int> adjacent[],int v)
 {
-	bool visited[v];
-	bool RecTree[v];
+	int inDegree[v]={0};
 	for(int i=0;i<v;i++)
 	{
-		visited[i]=false;
-		RecTree[i]=false;
+		for(int j=0;j<adjacent[i].size();j++)
+			inDegree[adjacent[i][j]]++;
 	}
+	queue<int> q;
 	for(int i=0;i<v;i++)
+		if(inDegree[i]==0)
+			q.push(i);
+	while(!q.empty())
 	{
-		if(visited[i]==false)
+		int e=q.front();
+		cout<<e<<" ";
+		for(int x:adjacent[e])
 		{
-			if(DFSRec(adjacent,i,visited,RecTree))
-				return true;
+			if(--inDegree[x]==0)
+				q.push(x);
 		}
+		q.pop();
 	}
-	return false;
 }
 int main()
 {
@@ -86,6 +73,5 @@ void solve()
 	vector<int> adjacent[v];
 	scanList(adjacent,v,e);
 	printList(adjacent,v);
-	string s=detectCycleDG(adjacent,v)?"cycle present\n":"cycle not present\n";
-	cout<<s;	
+	topologicalSort(adjacent,v);
 }
