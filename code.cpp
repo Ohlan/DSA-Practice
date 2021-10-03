@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define mod 1000000007
+#define INF INT_MAX
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
@@ -12,15 +13,18 @@ void addEdge(vector<int> adjacent[],int a,int b)
 {
 	adjacent[a].push_back(b);
 }
-void scanList(vector<int> adjacent[],int v,int e)
+void scanList(vector<int> adjacent[],int e,map<ii,int> &weights)
 {
 	while(e--)
 	{
-		int a,b;
+		int a,b,w;
 		cin>>a>>b;
+		cin>>w;
+		weights.insert(make_pair(make_pair(a,b),w));
 		addEdge(adjacent,a,b);
 	}
 }
+
 void printList(vector<int> adjacent[],int v)
 {
 	for(int i=0;i<v;i++)
@@ -31,13 +35,20 @@ void printList(vector<int> adjacent[],int v)
 		cout<<"\n";
 	}
 }
-
-void DFSRec(vector<int>adjacent[],int u,bool visited[],stack<int> &ans)
+int weight(map<ii,int> &mp,int a,int b)
 {
-	visited[u]=true;
+	if(mp.count(make_pair(a,b))==0)
+		return INF;
+	else
+		return mp[make_pair(a,b)];
+}
+
+void DFSRec(vector<int>adjacent[],int u,int visited[],stack<int> &ans)
+{
+	visited[u]=1;
 	for(auto x:adjacent[u])
 	{
-		if(visited[x]==false)
+		if(visited[x]==0)
 		{
 			DFSRec(adjacent,x,visited,ans);
 		}
@@ -45,20 +56,29 @@ void DFSRec(vector<int>adjacent[],int u,bool visited[],stack<int> &ans)
 	ans.push(u);
 }
 
-void topologicalSortDFS(vector<int> adjacent[],int v)
+vi shortestPathDAG(vector<int> adjacent[],int v,map<ii,int> &mp,int source)
 {
-	stack<int> ans;
-	bool visited[v]={0};
+	stack<int> topologicalSorted;
+	int visited[v]={0};
 	for(int i=0;i<v;i++)
 	{
 		if(visited[i]==0)
-			DFSRec(adjacent,i,visited,ans);
+			DFSRec(adjacent,i,visited,topologicalSorted);
 	}
-	while(!ans.empty())
+	vi dist(v,INF);
+	dist[source]=0;
+	while(!topologicalSorted.empty())
 	{
-		cout<<ans.top()<<" ";
-		ans.pop();
+		int u=topologicalSorted.top();
+		if(dist[u]!=INF)	
+			for(int x:adjacent[u])
+			{
+				if(dist[x]>dist[u]+weight(mp,u,x))
+					dist[x]=dist[u]+weight(mp,u,x);
+			}
+		topologicalSorted.pop();
 	}
+	return dist;
 }
 int main()
 {
@@ -75,7 +95,10 @@ void solve()
 	int v,e;
 	cin>>v>>e;
 	vector<int> adjacent[v];
-	scanList(adjacent,v,e);
+	map<ii,int> weights;
+	scanList(adjacent,e,weights);
 	printList(adjacent,v);
-	topologicalSortDFS(adjacent,v);
+	vi dist=shortestPathDAG(adjacent,v,weights,3);
+	for(auto x:dist)
+		cout<<x<<" ";
 }
