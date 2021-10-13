@@ -9,76 +9,52 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
-void addEdge(vector<int> adjacent[],int a,int b)
-{
-	adjacent[a].push_back(b);
-}
-void scanList(vector<int> adjacent[],int e,map<ii,int> &weights)
-{
-	while(e--)
-	{
-		int a,b,w;
-		cin>>a>>b;
-		cin>>w;
-		weights.insert(make_pair(make_pair(a,b),w));
-		addEdge(adjacent,a,b);
-	}
-}
+int memo[7][7];
 
-void printList(vector<int> adjacent[],int v)
+int lcs(string a,string b,int n,int m)
 {
-	for(int i=0;i<v;i++)
-	{
-		cout<<i<<":  ";
-		for(int j=0;j<adjacent[i].size();j++)
-			cout<<adjacent[i][j]<<" ";
-		cout<<"\n";
-	}
-}
-int weight(map<ii,int> &mp,int a,int b)
-{
-	if(mp.count(make_pair(a,b))==0)
-		return INF;
+	if(n==0||m==0)
+		return 0;
+	if(a[n-1]==b[m-1])
+		return 1+lcs(a,b,n-1,m-1);
 	else
-		return mp[make_pair(a,b)];
-}
-
-void DFSRec(vector<int>adjacent[],int u,int visited[],stack<int> &ans)
-{
-	visited[u]=1;
-	for(auto x:adjacent[u])
 	{
-		if(visited[x]==0)
+		return max(lcs(a,b,n,m-1),lcs(a,b,n-1,m));
+	}
+}
+int lcsMemo(string a,string b,int n,int m)
+{
+	if(memo[n][m]!=-1)
+		return memo[n][m];
+	if(n==0||m==0)
+		memo[n][m]= 0;
+	else if(a[n-1]==b[m-1])
+		memo[n][m]= 1+lcs(a,b,n-1,m-1);
+	else
+	{
+		memo[n][m]= max(lcs(a,b,n,m-1),lcs(a,b,n-1,m));
+	}
+	return memo[n][m];
+}
+int lcsDP(string a,string b,int n,int m)
+{
+	int dp[n+1][m+1];
+	for(int i=0;i<=n;i++)
+		dp[i][0]=0;
+	for(int i=0;i<=m;i++)
+		dp[0][i]=0;
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=1;j<=m;j++)
 		{
-			DFSRec(adjacent,x,visited,ans);
+			if(a[i-1]==b[j-1])
+				dp[i][j]=dp[i-1][j-1]+1;
+			else
+				dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
 		}
 	}
-	ans.push(u);
-}
+	return dp[n][m];
 
-vi shortestPathDAG(vector<int> adjacent[],int v,map<ii,int> &mp,int source)
-{
-	stack<int> topologicalSorted;
-	int visited[v]={0};
-	for(int i=0;i<v;i++)
-	{
-		if(visited[i]==0)
-			DFSRec(adjacent,i,visited,topologicalSorted);
-	}
-	vi dist(v,INF);
-	dist[source]=0;
-	while(!topologicalSorted.empty())
-	{
-		int u=topologicalSorted.top();
-		if(dist[u]!=INF)	
-			for(int x:adjacent[u])
-			{
-				if(dist[x]>dist[u]+weight(mp,u,x))
-					dist[x]=dist[u]+weight(mp,u,x);
-			}
-		topologicalSorted.pop();
-	}
-	return dist;
 }
 int main()
 {
@@ -86,19 +62,18 @@ int main()
     cin.tie(NULL);
 	int t;
 	cin>>t;
+	for(int i=0;i<7;i++)
+		for(int j=0;j<7;j++)
+			memo[i][j]=-1;
 	while(t--)
 		solve();	
 	return 0;
 }
 void solve()
 {
-	int v,e;
-	cin>>v>>e;
-	vector<int> adjacent[v];
-	map<ii,int> weights;
-	scanList(adjacent,e,weights);
-	printList(adjacent,v);
-	vi dist=shortestPathDAG(adjacent,v,weights,3);
-	for(auto x:dist)
-		cout<<x<<" ";
+	int n,m;
+	cin>>n>>m;
+	string a,b;
+	cin>>a>>b;
+	cout<<lcsMemo(a,b,n,m)<<"\n";	
 }
