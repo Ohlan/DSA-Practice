@@ -13,16 +13,20 @@ void solve();
 
 ll noOfWays(int n,int m, vi &coins)
 {
-	if(n==0)
-	{
-		return 1;
-	}
-	if(m==0)
-		return 0;
-	int res=noOfWays(n,m-1,coins);
-	if(coins[m-1]<=n)
-		res=res+noOfWays(n-coins[m-1],m,coins);
-	return res;
+	int dp[n+1][m+1];
+	for(int i=0;i<=m;i++) dp[0][i]=1;
+	for(int i=1;i<=n;i++) dp[i][0]=0;
+
+	for(int i=1;i<=n;i++)
+		for(int j=1;j<=m;j++)
+		{
+			dp[i][j]=dp[i][j-1];
+			if(coins[j-1]<=i)
+			{
+				dp[i][j]+=dp[i-coins[j-1]][j];
+			}
+		}
+	return dp[n][m];
 }
 
 int main()
