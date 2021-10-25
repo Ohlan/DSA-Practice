@@ -11,22 +11,17 @@ using namespace std;
 typedef pair<int,int> ii;
 void solve();
 
-ll noOfWays(int n,int m, vi &coins)
+int maxCuts(int n,int a, int b,int c)
 {
-	int dp[n+1][m+1];
-	for(int i=0;i<=m;i++) dp[0][i]=1;
-	for(int i=1;i<=n;i++) dp[i][0]=0;
+	if(n<0)
+		return -1;
+	if(n==0)
+		return 0;
 
-	for(int i=1;i<=n;i++)
-		for(int j=1;j<=m;j++)
-		{
-			dp[i][j]=dp[i][j-1];
-			if(coins[j-1]<=i)
-			{
-				dp[i][j]+=dp[i-coins[j-1]][j];
-			}
-		}
-	return dp[n][m];
+	int res= max(maxCuts(n-a,a,b,c),max(maxCuts(n-b,a,b,c),maxCuts(n-c,a,b,c)));
+	if(res!=-1)
+		return res+1;
+	return res;
 }
 
 int main()
@@ -41,12 +36,8 @@ int main()
 }
 void solve()
 {
-	int n,m;
-	cin>>n>>m;
-	vi coins(m);
-	for(auto &x:coins)
-	{
-		cin>>x;
-	}
-	cout<<noOfWays(n,m,coins)<<"\n";
+	int n,a,b,c;
+	cin>>n>>a>>b>>c;
+	
+	cout<<maxCuts(n,a,b,c)<<"\n";
 }
