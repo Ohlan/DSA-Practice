@@ -10,18 +10,18 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
-
-int maxCuts(int n,int a, int b,int c)
+int editDistance(string s1,string s2,int m,int n)
 {
-	if(n<0)
-		return -1;
+	if(m==0)
+		return n;
 	if(n==0)
-		return 0;
-
-	int res= max(maxCuts(n-a,a,b,c),max(maxCuts(n-b,a,b,c),maxCuts(n-c,a,b,c)));
-	if(res!=-1)
-		return res+1;
-	return res;
+		return m;
+	if(s1[m-1]==s2[n-1])
+		return editDistance(s1,s2,m-1,n-1);
+	else
+		return 1+min(editDistance(s1,s2,m-1,n-1),
+					 min(editDistance(s1,s2,m,n-1),
+					 editDistance(s1,s2,m-1,n)));
 }
 
 int main()
@@ -36,8 +36,10 @@ int main()
 }
 void solve()
 {
-	int n,a,b,c;
-	cin>>n>>a>>b>>c;
-	
-	cout<<maxCuts(n,a,b,c)<<"\n";
+	string s1,s2;
+	cin>>s1>>s2;
+	int m=s1.length();
+	int n=s2.length();
+	int ans=editDistance(s1,s2,m,n);
+	cout<<ans<<"\n";	
 }
