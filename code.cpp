@@ -10,22 +10,32 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
-int editDistance(string s1,string s2,int m,int n)
+int lis(vi a,int n)
 {
-	int dp[m+1][n+1];
-	dp[0][0]=0;
-	for(int i=1;i<=m;i++) dp[i][0]=i;
-	for(int i=1;i<=n;i++) dp[0][i]=i;
+	if(n==0)
+		return 0;
+	vi lisEndingWithCurr(n);
+	lisEndingWithCurr[0]=1;
 
-	for(int i=1;i<=m;i++)
-		for(int j=1;j<=n;j++)
+	for(int i=1;i<n;i++)
+	{
+		int m=1;
+		for(int j=0;j<i;j++)
 		{
-			if(s1[i-1]==s2[j-1])
-				dp[i][j]=dp[i-1][j-1];
-			else
-				dp[i][j]=1+min(dp[i-1][j-1],min(dp[i-1][j],dp[i][j-1]));
+			int curr;
+			if(a[j]<a[i])
+			{
+				curr=lisEndingWithCurr[j]+1;
+				m=max(m,curr);
+			}
 		}
-	return dp[m][n];
+		lisEndingWithCurr[i]=m;
+	}
+	int m=1;
+	for(int i=0;i<n;i++)
+		m=max(m,lisEndingWithCurr[i]);
+	return m;
+
 }
 
 int main()
@@ -40,10 +50,11 @@ int main()
 }
 void solve()
 {
-	string s1,s2;
-	cin>>s1>>s2;
-	int m=s1.length();
-	int n=s2.length();
-	int ans=editDistance(s1,s2,m,n);
-	cout<<ans<<"\n";	
+	int n;
+	cin>>n;
+	vi a(n);
+	for(auto &x:a)
+		cin>>x;
+	
+	cout<<lis(a,n)<<"\n";
 }
