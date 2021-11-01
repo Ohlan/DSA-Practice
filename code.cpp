@@ -10,32 +10,43 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
-int lis(vi a,int n)
+int findlis(vector<int> lisWithMinTail,int end,int k)
+{
+	int start=0;
+	while(start<=end)
+	{
+		int mid=(start+end)/2;
+		if(lisWithMinTail[mid]>=k&&(mid==0||lisWithMinTail[mid-1]<k))
+			return mid;
+		else if(lisWithMinTail[mid]<k)
+			start=mid+1;
+		else
+			end=mid-1;
+	}
+	return 0;
+}
+int lisTail(vi a,int n)
 {
 	if(n==0)
 		return 0;
-	vi lisEndingWithCurr(n);
-	lisEndingWithCurr[0]=1;
-
-	for(int i=1;i<n;i++)
+	vector<int> lisWithMinTail(1);
+	lisWithMinTail[0]=1;
+	int j,i;
+	for(i=1,j=0;i<n;i++)
 	{
-		int m=1;
-		for(int j=0;j<i;j++)
+		if(a[i]>lisWithMinTail[j])
 		{
-			int curr;
-			if(a[j]<a[i])
-			{
-				curr=lisEndingWithCurr[j]+1;
-				m=max(m,curr);
-			}
+			lisWithMinTail.push_back(a[i]);
+			j++;
 		}
-		lisEndingWithCurr[i]=m;
+		else
+		{
+			int ind=findlis(lisWithMinTail,j,a[i]);
+			lisWithMinTail[ind]=a[i];
+		}
+		
 	}
-	int m=1;
-	for(int i=0;i<n;i++)
-		m=max(m,lisEndingWithCurr[i]);
-	return m;
-
+	return j+1;
 }
 
 int main()
@@ -56,5 +67,5 @@ void solve()
 	for(auto &x:a)
 		cin>>x;
 	
-	cout<<lis(a,n)<<"\n";
+	cout<<lisTail(a,n)<<"\n";
 }
