@@ -10,62 +10,88 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
-int findlis(vector<int> lisWithMinTail,int end,int k)
+
+/*
+ * Complete the 'numberOfWays' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts 2D_INTEGER_ARRAY roads as parameter.
+ */
+
+
+void addEdge(vector<int> adjacent[],int a,int b)
 {
-	int start=0;
-	while(start<=end)
-	{
-		int mid=(start+end)/2;
-		if(lisWithMinTail[mid]>=k&&(mid==0||lisWithMinTail[mid-1]<k))
-			return mid;
-		else if(lisWithMinTail[mid]<k)
-			start=mid+1;
-		else
-			end=mid-1;
-	}
-	return 0;
+    adjacent[a].push_back(b);
+    adjacent[b].push_back(a);
 }
-int lisTail(vi a,int n)
+void scanList(vector<int> adjacent[],int v,int e)
 {
-	if(n==0)
-		return 0;
-	vector<int> lisWithMinTail(1);
-	lisWithMinTail[0]=1;
-	int j,i;
-	for(i=1,j=0;i<n;i++)
-	{
-		if(a[i]>lisWithMinTail[j])
-		{
-			lisWithMinTail.push_back(a[i]);
-			j++;
-		}
-		else
-		{
-			int ind=findlis(lisWithMinTail,j,a[i]);
-			lisWithMinTail[ind]=a[i];
-		}
-		
-	}
-	return j+1;
+    while(e--)
+    {
+        int a,b;
+        cin>>a>>b;
+        addEdge(adjacent,a,b);
+    }
+}
+int depth(vector<int>adj[], vi &vis, int root,int curr)
+{
+    vis[root]=1;
+    curr++;
+    int d=curr;
+    for(int i=0;i<adj[root].size();i++)
+    {
+        if(vis[adj[root][i]]==0)
+            d=max(d,depth(adj,vis,adj[root][i],curr+1));
+    }
+    return d;
+}
+int levelorder(vector<int>adj[], int root,int v)
+{
+    int curr=0;
+    int count=adj[root].size();
+    if(count>=3)
+    {
+        int m=INF;
+        vi vis(v,0);
+        for(int i=0;i<adj[root].size();i++)
+        {
+            int d=depth(adj,vis,adj[root][i],0);
+            
+            m=min(d,m);
+        }
+        count=(count*(count-1)*(count-2))/6;
+        curr=count*m;
+    }
+    return curr;
+}
+
+
+int numberOfWays(vector<int> adj[],int v)
+{   
+    int ans=0;
+    for(int i=0;i<v;i++)
+    {
+        ans+=levelorder(adj, i, v);
+    }
+    return ans;
 }
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
+    ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-	int t;
-	cin>>t;
-	while(t--)
-		solve();	
-	return 0;
+    int t;
+    cin>>t;
+    while(t--)
+        solve();
+    return 0;
 }
 void solve()
 {
-	int n;
-	cin>>n;
-	vi a(n);
-	for(auto &x:a)
-		cin>>x;
-	
-	cout<<lisTail(a,n)<<"\n";
+    int v,e;
+    cin>>v>>e;
+    vector<int> adjacent[v];
+    scanList(adjacent,v,e);
+    cout<<numberOfWays(adjacent,v)<<"\n";
 }
+
