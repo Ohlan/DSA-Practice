@@ -19,62 +19,27 @@ void solve();
  */
 
 
-void addEdge(vector<int> adjacent[],int a,int b)
+int renameFile(string newName, string oldName,int n,int m)
 {
-    adjacent[a].push_back(b);
-    adjacent[b].push_back(a);
-}
-void scanList(vector<int> adjacent[],int v,int e)
-{
-    while(e--)
-    {
-        int a,b;
-        cin>>a>>b;
-        addEdge(adjacent,a,b);
-    }
-}
-int depth(vector<int>adj[], vi &vis, int root,int curr)
-{
-    vis[root]=1;
-    curr++;
-    int d=curr;
-    for(int i=0;i<adj[root].size();i++)
-    {
-        if(vis[adj[root][i]]==0)
-            d=max(d,depth(adj,vis,adj[root][i],curr+1));
-    }
-    return d;
-}
-int levelorder(vector<int>adj[], int root,int v)
-{
-    int curr=0;
-    int count=adj[root].size();
-    if(count>=3)
-    {
-        int m=INF;
-        vi vis(v,0);
-        for(int i=0;i<adj[root].size();i++)
+    int dp[n+1][m+1];
+    dp[0][0]=1;
+    for(int i=1;i<=n;i++)
+        dp[i][0]=0;
+    for(int i=1;i<=m;i++)
+        dp[0][i]=1;
+    
+    for(int i=1;i<=n;i++)
+        for(int j=1;j<=m;j++)
         {
-            int d=depth(adj,vis,adj[root][i],0);
-            
-            m=min(d,m);
+            if(newName[i-1]!=oldName[j-1])
+                dp[i][j]=dp[i][j-1];
+            else
+                dp[i][j]=dp[i][j-1]+dp[i-1][j-1];
         }
-        count=(count*(count-1)*(count-2))/6;
-        curr=count*m;
-    }
-    return curr;
+    return dp[n][m];
+    
 }
 
-
-int numberOfWays(vector<int> adj[],int v)
-{   
-    int ans=0;
-    for(int i=0;i<v;i++)
-    {
-        ans+=levelorder(adj, i, v);
-    }
-    return ans;
-}
 
 int main()
 {
@@ -88,10 +53,10 @@ int main()
 }
 void solve()
 {
-    int v,e;
-    cin>>v>>e;
-    vector<int> adjacent[v];
-    scanList(adjacent,v,e);
-    cout<<numberOfWays(adjacent,v)<<"\n";
+    int n,m;
+    cin>>n>>m;
+    string newName,oldName;
+    cin>>newName>>oldName;
+    cout<<renameFile(newName,oldName,n,m)<<"\n";
 }
 
