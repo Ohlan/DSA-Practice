@@ -10,36 +10,14 @@ using namespace std;
 #define dq deque<int>
 typedef pair<int,int> ii;
 void solve();
-
-/*
- * Complete the 'numberOfWays' function below.
- *
- * The function is expected to return an INTEGER.
- * The function accepts 2D_INTEGER_ARRAY roads as parameter.
- */
-
-
-int renameFile(string newName, string oldName,int n,int m)
+void fn(vll &a,ll ex)
 {
-    int dp[n+1][m+1];
-    dp[0][0]=1;
-    for(int i=1;i<=n;i++)
-        dp[i][0]=0;
-    for(int i=1;i<=m;i++)
-        dp[0][i]=1;
-    
-    for(int i=1;i<=n;i++)
-        for(int j=1;j<=m;j++)
-        {
-            if(newName[i-1]!=oldName[j-1])
-                dp[i][j]=dp[i][j-1];
-            else
-                dp[i][j]=dp[i][j-1]+dp[i-1][j-1];
-        }
-    return dp[n][m];
-    
+    for(auto &x:a)
+    {
+        x+=ex;
+        x/=2;
+    }
 }
-
 
 int main()
 {
@@ -48,15 +26,43 @@ int main()
     int t;
     cin>>t;
     while(t--)
-        solve();
+        solve();    
     return 0;
 }
+
 void solve()
 {
-    int n,m;
-    cin>>n>>m;
-    string newName,oldName;
-    cin>>newName>>oldName;
-    cout<<renameFile(newName,oldName,n,m)<<"\n";
-}
+    int n;
+    cin>>n;
+    vll a(n);
+    for(auto &x:a)
+        cin>>x;
+    ll ans=0;
+    ll fg=0;
+    for(ll i=0,t=1;i<64;i++)
+    {
+        ll c=0;
+        for(int j=0;j<n;j++)
+        {
+            if(a[j]%2!=0)
+                c++;
+        }
+        if(c%2==1)
+        {
+            fn(a,t);
+            ans=ans+t;
+            
+        }        
+        
+        t*=2;
+    }
+    for(int i=0;i<n;i++)
+        fg=(fg^a[i]);
 
+    
+    if(fg!=0)
+        cout<<"-1\n";
+    else
+        cout<<ans<<"\n";
+
+}
