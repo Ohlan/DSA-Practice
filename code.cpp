@@ -1,68 +1,109 @@
 #include<bits/stdc++.h>
 using namespace std;
-// #define mod 1000000007
-#define INF INT_MAX
 #define ll long long
 #define vi vector<int>
-#define vll vector<long long>
-#define ull unsigned long long
-#define pq priority_queue<int>
-#define dq deque<int>
-typedef pair<int,int> ii;
-void solve();
-void fn(vll &a,ll ex)
+typedef struct node
 {
-    for(auto &x:a)
+    int data;
+    int hd;
+    struct node* left;
+    struct node* right;
+    node(int data)
     {
-        x+=ex;
-        x/=2;
+        this->data = data;
+        left = right = NULL;
     }
+}node;
+void solveBT();
+
+void inorderIterative(node* root)
+{
+    stack<node*> rec;
+    while(!rec.empty()||root)
+    {
+        if(root)
+        {
+            rec.push(root);
+            root=root->left;
+        }
+        else
+        {
+            root=rec.top();
+            rec.pop();
+            cout<<root->data<<" ";
+            root=root->right;
+        }
+
+    }    
+    
+}
+void preorderIterative(node* root)
+{
+    stack<node*> rec;
+    while(!rec.empty()||root)
+    {
+        if(root)
+        {
+            cout<<root->data<<" ";
+            rec.push(root);
+            root=root->left;
+        }
+        else
+        {
+            root=rec.top();
+            rec.pop();            
+            root=root->right;
+        }
+
+    }    
+    
+}
+
+void postorderIterative(node* root)
+{
+    if(root==NULL)
+        return;
+    stack<node*> rec;
+    stack<int> output;
+    rec.push(root);
+    while(!rec.empty())
+    {
+        node*temp=rec.top();
+        rec.pop();
+        output.push(temp->data);
+        if(temp->left)
+            rec.push(temp->left);
+        if(temp->right)
+            rec.push(temp->right);
+        
+    }    
+    while(!output.empty())
+    {
+        cout<<output.top()<<" ";
+        output.pop();
+    }
+    
 }
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int t;
-    cin>>t;
-    while(t--)
-        solve();    
+    
+    solveBT();
     return 0;
 }
-
-void solve()
+void solveBT()
 {
-    int n;
-    cin>>n;
-    vll a(n);
-    for(auto &x:a)
-        cin>>x;
-    ll ans=0;
-    ll fg=0;
-    for(ll i=0,t=1;i<64;i++)
-    {
-        ll c=0;
-        for(int j=0;j<n;j++)
-        {
-            if(a[j]%2!=0)
-                c++;
-        }
-        if(c%2==1)
-        {
-            fn(a,t);
-            ans=ans+t;
-            
-        }        
-        
-        t*=2;
-    }
-    for(int i=0;i<n;i++)
-        fg=(fg^a[i]);
-
     
-    if(fg!=0)
-        cout<<"-1\n";
-    else
-        cout<<ans<<"\n";
-
+    node *root = new node(6);
+    root->left = new node(3);
+    root->right = new node(7);
+    root->left->left = new node(2);
+    root->left->left->right = new node(1);
+    root->left->right = new node(5);
+    root->left->right->left = new node(4); 
+    
+    postorderIterative(root);
+    
 }
