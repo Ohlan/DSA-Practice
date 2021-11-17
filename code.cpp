@@ -2,6 +2,7 @@
 using namespace std;
 #define ll long long
 #define vi vector<int>
+void solveBT();
 typedef struct node
 {
     int data;
@@ -14,73 +15,34 @@ typedef struct node
         left = right = NULL;
     }
 }node;
-void solveBT();
 
-void inorderIterative(node* root)
+void diogonalQueueIterative(node* root)
 {
-    stack<node*> rec;
-    while(!rec.empty()||root)
+    if(root)
     {
-        if(root)
+        queue<node*> q;
+        node* temp=root;
+        q.push(temp);
+        while(!q.empty())
         {
-            rec.push(root);
-            root=root->left;
-        }
-        else
-        {
-            root=rec.top();
-            rec.pop();
-            cout<<root->data<<" ";
-            root=root->right;
+            
+            int size=q.size();
+            while(size--)
+            {
+                temp=q.front();
+                q.pop();
+                while(temp)
+                {
+                    cout<<temp->data<<" ";
+                    if(temp->left)
+                        q.push(temp->left);
+                    temp=temp->right;
+                }
+            }
+            cout<<"\n";
+
         }
 
-    }    
-    
-}
-void preorderIterative(node* root)
-{
-    stack<node*> rec;
-    while(!rec.empty()||root)
-    {
-        if(root)
-        {
-            cout<<root->data<<" ";
-            rec.push(root);
-            root=root->left;
-        }
-        else
-        {
-            root=rec.top();
-            rec.pop();            
-            root=root->right;
-        }
-
-    }    
-    
-}
-
-void postorderIterative(node* root)
-{
-    if(root==NULL)
-        return;
-    stack<node*> rec;
-    stack<int> output;
-    rec.push(root);
-    while(!rec.empty())
-    {
-        node*temp=rec.top();
-        rec.pop();
-        output.push(temp->data);
-        if(temp->left)
-            rec.push(temp->left);
-        if(temp->right)
-            rec.push(temp->right);
-        
-    }    
-    while(!output.empty())
-    {
-        cout<<output.top()<<" ";
-        output.pop();
     }
     
 }
@@ -104,6 +66,6 @@ void solveBT()
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
     
-    postorderIterative(root);
+    diogonalQueueIterative(root);
     
 }
