@@ -16,36 +16,27 @@ typedef struct node
     }
 }node;
 
-void diogonalQueueIterative(node* root)
-{
-    if(root)
-    {
-        queue<node*> q;
-        node* temp=root;
-        q.push(temp);
-        while(!q.empty())
+int checkMirrorTree(int n, int e, int A[], int B[]) {
+        unordered_map<int,stack<int>> st;
+        
+        for(int i=0;i<2*e;i+=2)
         {
-            
-            int size=q.size();
-            while(size--)
-            {
-                temp=q.front();
-                q.pop();
-                while(temp)
-                {
-                    cout<<temp->data<<" ";
-                    if(temp->left)
-                        q.push(temp->left);
-                    temp=temp->right;
-                }
-            }
-            cout<<"\n";
-
+            st[A[i]].push(A[i+1]);
         }
-
+        
+        for(int i=0;i<2*e;i+=2)
+        {
+            if(st.find(B[i])==st.end())
+            {
+                return 0;
+            }
+            if(st[B[i]].top()!=B[i+1])
+                return 0;
+            st[B[i]].pop();
+        }
+        return 1;
     }
-    
-}
+
 
 int main()
 {
@@ -66,6 +57,6 @@ void solveBT()
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
     
-    diogonalQueueIterative(root);
+    
     
 }
