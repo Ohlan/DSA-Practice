@@ -3,60 +3,40 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 void solveBT();
-typedef struct node
-{
-    int data;
-    int hd;
-    struct node* left;
-    struct node* right;
-    node(int data)
+vector<int> singleNumber(vector<int> nums) 
     {
-        this->data = data;
-        left = right = NULL;
-    }
-}node;
-
-int checkMirrorTree(int n, int e, int A[], int B[]) {
-        unordered_map<int,stack<int>> st;
+        int n = nums.size();
+        int xo=0;
+        int s1=0,s2=0;
         
-        for(int i=0;i<2*e;i+=2)
-        {
-            st[A[i]].push(A[i+1]);
-        }
+        for(int i=0;i<n;i++)
+            xo = (xo ^ nums[i]);
         
-        for(int i=0;i<2*e;i+=2)
+        xo = xo & (~(xo-1));
+        
+        for(int i=0;i<n;i++)
         {
-            if(st.find(B[i])==st.end())
-            {
-                return 0;
-            }
-            if(st[B[i]].top()!=B[i+1])
-                return 0;
-            st[B[i]].pop();
+            if(nums[i] & xo)
+                s1 = (s1^nums[i]);
+            else
+                s2 = (s2^nums[i]);
         }
-        return 1;
+        if(s1>s2)
+        {
+            s1=s1^s2;
+            s2=s1^s2;
+            s1=s1^s2;
+        }
+        return {s1,s2};
     }
-
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    solveBT();
+    
     return 0;
 }
-void solveBT()
-{
-    
-    node *root = new node(6);
-    root->left = new node(3);
-    root->right = new node(7);
-    root->left->left = new node(2);
-    root->left->left->right = new node(1);
-    root->left->right = new node(5);
-    root->left->right->left = new node(4); 
-    
-    
-    
-}
+
+
