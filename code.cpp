@@ -2,41 +2,52 @@
 using namespace std;
 #define ll long long
 #define vi vector<int>
-void solveBT();
-vector<int> singleNumber(vector<int> nums) 
+typedef struct node
+{
+    int data;
+    int hd;
+    struct node* left;
+    struct node* right;
+    node(int data)
     {
-        int n = nums.size();
-        int xo=0;
-        int s1=0,s2=0;
-        
-        for(int i=0;i<n;i++)
-            xo = (xo ^ nums[i]);
-        
-        xo = xo & (~(xo-1));
-        
-        for(int i=0;i<n;i++)
-        {
-            if(nums[i] & xo)
-                s1 = (s1^nums[i]);
-            else
-                s2 = (s2^nums[i]);
-        }
-        if(s1>s2)
-        {
-            s1=s1^s2;
-            s2=s1^s2;
-            s1=s1^s2;
-        }
-        return {s1,s2};
+        this->data = data;
+        left = right = NULL;
     }
+}node;
+void solveBT();
+node* searchInBST(node* root,int key)
+{
+    if(root==NULL||root->data==key)
+        return root;
+    if(root->data>key)
+        return searchInBST(root->left,key);
+    else
+        return searchInBST(root->right,key);
+}
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    
+    solveBT();
     return 0;
 }
-
-
+void solveBT()
+{
+    
+    node *root = new node(6);
+    root->left = new node(3);
+    root->right = new node(7);
+    root->left->left = new node(1);
+    root->left->left->right = new node(2);
+    root->left->right = new node(5);
+    root->left->right->left = new node(4); 
+    
+    node* ele= searchInBST(root,4);
+    if(ele)
+        cout<<ele->data<<": element found";
+    else
+        cout<<"element not found";
+    
+}
