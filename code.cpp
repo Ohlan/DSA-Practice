@@ -4,123 +4,50 @@ using namespace std;
 #define vi vector<int>
 typedef struct node
 {
-    int data;
+    int key;
     int hd;
     struct node* left;
     struct node* right;
     node(int data)
     {
-        this->data = data;
+        this->key = data;
         left = right = NULL;
     }
 }node;
 void solveBT();
-void inOrder(node* root)
+void findPreSuc(node* root, node*& pre, node*& suc, int key)
 {
-    if(root)
+    if(root==NULL)
+        return ;
+    if(root->key==key)
     {
-        inOrder(root->left);
-        cout<<root->data<<" ";
-        inOrder(root->right);
-    }
-}
-pair<int,int> minMax(node* root)
-{
-    pair<int,int> p;
-    node* t1=root,*t2=root;
-    int x=INT_MIN,y=INT_MAX;
-    while(t1||t2)
-    {
-        if(t1)
-            if(t1->data>x)
-            {
-                x=t1->data;
-                t1=t1->right;
-            }
-        if(t2)
-            if(t2->data<y)
-            {
-                y=t2->data;
-                t2=t2->left;
-            }
-    }
-    return p=make_pair(x,y);
-}
-
-node* searchInBST(node* root,int key)
-{
-    if(root==NULL||root->data==key)
-        return root;
-    if(root->data>key)
-        return searchInBST(root->left,key);
-    else
-        return searchInBST(root->right,key);
-}
-
-
-node* predForDeletion(node* root)
-{
-    if(root==NULL||root->left==NULL)
-        return NULL;
-    root=root->left;
-    while(root->right)
-        root=root->right;
-    return root;
-}
-node* findParent(node* root,int key,node* par)
-{
-    if(root->data==key)
-        return par;
-    par=root;
-    if(root->data>key)
-        return findParent(root->left,key,par);
-    else
-        return findParent(root->right,key,par);
-}
-node* deleteInBST(node* root,int key)
-{
-    node* temp= searchInBST(root,key);
-    if(temp==NULL)
-        return root;
-    node* par = findParent(root,key,NULL);
-    if(temp->left==NULL&&temp->right==NULL)
-    {
-        if(par==NULL)
-            return NULL;
-        if(par->left==temp)
-            par->left=NULL;
-        else
-            par->right=NULL;
-        return root;
-    }
-    else if(temp->left==NULL||temp->right==NULL)
-    {
-        node* grand= (temp->left==NULL)?temp->right:temp->left;
-        if(par==NULL)
+        if(root->left)
         {
-            return grand;
+            pre = root->left;
+            while(pre->right)
+                pre=pre->right;
+            
         }
-        else
+        if(root->right)
         {
-            if(par->left==temp)
-                par->left=grand;
-            else
-                par->right=grand;
-            return root;
+            suc = root->right;
+            while(suc->left)
+                suc=suc->left;
         }
-    }
-    else
-    {
-        node* pred= predForDeletion(temp);
         
-        int x=pred->data;
-        root=deleteInBST(root,pred->data);
-        temp->data= x;
-        return root;
+    }
+    else if(key> root->key)
+    {
+        pre=root;
+        findPreSuc(root->right,pre,suc,key);
+    }
+    else
+    {
+        suc=root;
+        findPreSuc(root->left,pre,suc,key);
     }
 
 }
-
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -140,66 +67,11 @@ void solveBT()
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
     
-    inOrder(root);
-    root = deleteInBST(root,6);
-    root = deleteInBST(root,5);
-    root = deleteInBST(root,7);
-    root = deleteInBST(root,7);
-    cout<<"\n";
-    inOrder(root);
+    node* t1=NULL,*t2=NULL;
+    findPreSuc(root,t1,t2,5);
+    cout<<t1->key<<" ";
+    cout<<t2->key<<" ";
+    cout<<"\n";   
     
 }
 
-
-
-/*
-
-TreeNode* inorderSucc(TreeNode* root)
-    {
-        TreeNode* curr = root;
-        while(curr!=NULL && curr->left!=NULL)
-        {
-            curr = curr->left;
-        }
-        return curr;
-    }
-    
-    
-    TreeNode* deleteNode(TreeNode* root, int key) 
-    {
-        if(!root)
-        {
-            return NULL;
-        }
-        
-        if(key < root->val)
-        {
-            root->left = deleteNode(root->left, key);
-        }
-        else if(key > root->val)
-        {
-            root->right = deleteNode(root->right, key);
-        }
-        else
-        {
-            if(root->left == NULL)
-            {
-                TreeNode* temp = root->right;
-                delete(root);
-                return temp;
-            }
-            else if(root->right == NULL)
-            {
-                TreeNode* temp = root->left;
-                delete(root);
-                return temp;
-            }
-                TreeNode* temp = inorderSucc(root->right);
-                root->val = temp->val;
-                root->right = deleteNode(root->right, temp->val);
-        }
-        
-        return root;
-    }
-
-*/
