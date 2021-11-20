@@ -4,49 +4,72 @@ using namespace std;
 #define vi vector<int>
 typedef struct node
 {
-    int key;
+    int data;
     int hd;
     struct node* left;
     struct node* right;
     node(int data)
     {
-        this->key = data;
+        this->data = data;
         left = right = NULL;
     }
 }node;
 void solveBT();
-void findPreSuc(node* root, node*& pre, node*& suc, int key)
+void levelorder(node* root)
 {
     if(root==NULL)
-        return ;
-    if(root->key==key)
+        return;
+    queue<node*> q;
+    q.push(root);
+    q.push(NULL);
+    while(q.empty()==false)
     {
-        if(root->left)
+        node* temp=q.front();
+        if(temp)
         {
-            pre = root->left;
-            while(pre->right)
-                pre=pre->right;
-            
-        }
-        if(root->right)
-        {
-            suc = root->right;
-            while(suc->left)
-                suc=suc->left;
-        }
-        
-    }
-    else if(key> root->key)
-    {
-        pre=root;
-        findPreSuc(root->right,pre,suc,key);
-    }
-    else
-    {
-        suc=root;
-        findPreSuc(root->left,pre,suc,key);
-    }
+            while(q.front()!=NULL)  
+            {
+                cout<<temp->data<<" ";
+                if (temp->left != NULL) 
+                    q.push(temp->left); 
 
+                if (temp->right != NULL) 
+                    q.push(temp->right); 
+                q.pop();
+                temp=q.front();
+            }
+            cout<<"\n";
+            q.push(NULL);
+        }
+        q.pop();
+    }
+}
+void storeInorderInArray(vector<node*> &array,node* root)
+{
+    if(root)
+    {
+        storeInorderInArray(array,root->left);
+        array.push_back(root);
+        storeInorderInArray(array,root->right);
+    }
+}
+void printBST(node* root)
+{
+    if(root)
+    {
+        printBST(root->left);
+        cout<<root->data<<" ";
+        printBST(root->right);
+    }
+}
+node* normalToBalancedBST(vector<node*> &array, int start,int end)
+{
+    if(start>end)
+        return NULL;
+    int mid = (start+end)/2;
+    array[mid]->left = normalToBalancedBST(array, start, mid-1);
+    array[mid]->right = normalToBalancedBST(array, mid+1, end);
+    return array[mid];
 }
 int main()
 {
@@ -66,12 +89,14 @@ void solveBT()
     root->left->left->right = new node(2);
     root->left->right = new node(5);
     root->left->right->left = new node(4); 
-    
-    node* t1=NULL,*t2=NULL;
-    findPreSuc(root,t1,t2,5);
-    cout<<t1->key<<" ";
-    cout<<t2->key<<" ";
+    vector<node*> array;
+    storeInorderInArray(array,root);
+    int n=array.size();
+    levelorder(root);
     cout<<"\n";   
+    root = normalToBalancedBST(array,0,n-1);
+    levelorder(root);
+    
     
 }
 
