@@ -14,64 +14,36 @@ void swap(int a[],int i,int j)
     a[i] = a[j];
     a[j] = temp;
 }
-struct max_heap
+void heapify(int a[],int size,int i)
 {
-    int a[N];
-    int size = 0;
+    int max = i;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
+    if(left<size&&a[left]>a[max])
+        max=left;
+    if(right<size&&a[right]>a[max])
+        max=right;
+    if(i!=max)
+    {
+        swap(a,i,max);
+        heapify(a,size,max);
+    }
+}
 
-    void heapify(int i)
+void heapSort(int a[],int n)
+{
+    for(int i = (n-2)/2;i>=0;i--)
     {
-        int max = i;
-        int left = 2*i + 1;
-        int right = 2*i + 2;
-        if(left<size&&a[left]>a[max])
-            max=left;
-        if(right<size&&a[right]>a[max])
-            max=right;
-        if(i!=max)
-        {
-            swap(a,i,max);
-            heapify(max);
-        }
+        heapify(a,n,i);
     }
-
-    void push(int key)
+    int i =n-1;
+    while(i>=0)
     {
-        a[size++] = key;
-        int j = size-1;
-        while(j>=0)
-        {
-            heapify(j);
-            if(j-1<0)
-                break;
-            j = (j-1)/2;
-        }
+        swap(a,0,i);
+        heapify(a,i,0);
+        i--;
     }
-    bool empty()
-    {
-        if(size==0)
-            return true;
-        return false;
-    }
-    int top()
-    {
-        if(size==0)
-            return INT_MIN;
-        return a[0];
-    }
-    void pop()
-    {
-        if(size==0)
-            cout<<"Err... heap is empty!!!";
-        else
-        {
-            swap(a,0,size-1);
-            size--;
-            heapify(0);
-        }
-    }
-};
-
+}
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -87,16 +59,15 @@ void solve()
 {
     int n;
     cin>>n;
-    max_heap q;
-    int i;
-    while(n--)
+    int a[n];
+    for(int i = 0;i<n;i++)
     {
-        cin>>i;
-        q.push(i);
-    } 
-    while(!q.empty())
-    {
-        cout<<q.top()<<" ";
-        q.pop();
+        cin>>a[i];
     }
+    heapSort(a,n);
+    for(int i = 0;i<n;i++)
+    {
+        cout<<a[i]<<" ";
+    }
+    cout<<"\n";
 }
