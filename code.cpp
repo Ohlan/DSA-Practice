@@ -1,51 +1,77 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define N 100
+#define N 100000
 #define ll long long
 #define vi vector<int>
 #define ull unsigned long long
 #define pq priority_queue<int>
 #define dq deque<int>
 typedef pair<int,int> ii;
-bool safe(int pos,int q,vector<int> &place)
+void solve();
+void swap(int a[],int i,int j)
 {
-    int x = q, y = pos;
-    for(int i=0;i<q;i++)
-    {
-        int k= place[i]-1;
-        if(k==pos||(k+i==x+y)||(k-i==y-x))
-            return false;
-    }
-    return true;
+    int temp = a[i];
+    a[i] = a[j];
+    a[j] = temp;
 }
-
-void find(int n, vector<int> &place, vector<vector<int>> &res, int q=0)
+struct max_heap
 {
-    if(q==n)
+    int a[N];
+    int size = 0;
+
+    void heapify(int i)
     {
-        res.push_back(place);
-        return ;
-    }
-    for(int i=0;i<n;i++)
-    {
-        if(safe(i,q,place))
+        int max = i;
+        int left = 2*i + 1;
+        int right = 2*i + 2;
+        if(left<size&&a[left]>a[max])
+            max=left;
+        if(right<size&&a[right]>a[max])
+            max=right;
+        if(i!=max)
         {
-            place[q] = i+1;
-            find(n,place,res,q+1);
-            place[q] = -1;
+            swap(a,i,max);
+            heapify(max);
         }
     }
-}
 
-vector<vector<int>> nQueen(int n) {
-    vector<vector<int>> res;
-    vector<int> place(n,-1);
-    find(n,place,res);
-    return res;
-}
+    void push(int key)
+    {
+        a[size++] = key;
+        int j = size-1;
+        while(j>=0)
+        {
+            heapify(j);
+            if(j-1<0)
+                break;
+            j = (j-1)/2;
+        }
+    }
+    bool empty()
+    {
+        if(size==0)
+            return true;
+        return false;
+    }
+    int top()
+    {
+        if(size==0)
+            return INT_MIN;
+        return a[0];
+    }
+    void pop()
+    {
+        if(size==0)
+            cout<<"Err... heap is empty!!!";
+        else
+        {
+            swap(a,0,size-1);
+            size--;
+            heapify(0);
+        }
+    }
+};
 
-
-void solve();
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -61,11 +87,16 @@ void solve()
 {
     int n;
     cin>>n;
-    vector<vector<int>> res= nQueen(n);
-    for(auto x:res)
-    {   
-        for(auto i:x)
-            cout<<i<<" ";
-        cout<<"\n";
-    }    
+    max_heap q;
+    int i;
+    while(n--)
+    {
+        cin>>i;
+        q.push(i);
+    } 
+    while(!q.empty())
+    {
+        cout<<q.top()<<" ";
+        q.pop();
+    }
 }
